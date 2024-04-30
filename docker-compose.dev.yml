@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server.dev
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+
+  proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile.proxy.dev
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - server
