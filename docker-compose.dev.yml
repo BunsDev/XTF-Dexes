@@ -17,9 +17,11 @@ services:
       dockerfile: Dockerfile.proxy.dev
     volumes:
       - .:/usr/src/app
+      - ./proxy-keys:/proxy
     ports:
       - "8000:8000"
     environment:
       - NODE_ENV=development
+      - SSLKEYLOGFILE=/proxy/keys2.log
     depends_on:
       - server

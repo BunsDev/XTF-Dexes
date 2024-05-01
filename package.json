@@ -8,7 +8,8 @@
     "start": "node dist/index.js",
     "dev": "nodemon --watch src --exec ts-node src/index.ts",
     "dev-proxy": "nodemon --watch src --exec ts-node src/proxy.ts",
-    "docker:start": "docker-compose -f docker-compose.dev.yml up --build"
+    "docker:start": "sudo docker-compose -f docker-compose.dev.yml up --build",
+    "browser": "./start-browser.sh"
   },
   "author": "Gaetano Mondelli",
   "license": "ISC",

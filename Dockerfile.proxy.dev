@@ -1,5 +1,7 @@
 FROM node:14
 
+RUN apt-get update && apt-get install -y tcpdump
+
 WORKDIR /usr/src/app
 
 COPY package*.json ./
@@ -9,4 +11,5 @@ COPY . .
 
 EXPOSE 8000
 
-CMD ["npm", "run", "dev-proxy"]
+RUN chmod +x /usr/src/app/start-proxy.sh
+CMD ["/usr/src/app/start-proxy.sh"]
