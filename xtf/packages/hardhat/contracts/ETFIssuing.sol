@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 import { IERC721 } from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { ISimpleERC20 } from "./SimpleERC20.sol";
-import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+import"@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 import "hardhat/console.sol";
 
 struct TokenQuantity {
