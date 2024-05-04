@@ -2,11 +2,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { DepositController } from "./_components/DepositController";
 import { MatrixView } from "./_components/MatrixView";
 import PieToken from "./_components/PieToken";
+import TokenBalanceAllowance from "./_components/tokenBalanceAllowance";
 import "./index.css";
 import { Watermark } from "antd";
 import type { NextPage } from "next";
+import { useAccount, useContractRead, useNetwork } from "wagmi";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { getParsedError, notification } from "~~/utils/scaffold-eth";
@@ -223,9 +226,11 @@ const ETF: NextPage = () => {
         </div>
         {/* {JSON.stringify(vault)} */}
         <br></br>
+        {etfTokenAddress && <TokenBalanceAllowance isApprove name={"ETF"} tokenAddress={etfTokenAddress} />}
         {tokens &&
           tokens.map((token: any, index: number) => {
             return chain?.id === token._chainId ? (
+              <TokenBalanceAllowance key={index} name={index.toString()} tokenAddress={token._address} />
             ) : (
               <b>
                 {index} Token:{" "}
@@ -245,7 +250,28 @@ const ETF: NextPage = () => {
         <h1>Collateral Vault</h1>
         <p>Bundle ID: {bundleId}</p>
         {etfTokenAddress}
-
+        <b>Required Tokens</b>
+        <DepositController
+          quantity={quantityTokenA}
+          setQuantity={setQuantityTokenA}
+          requiredQuantity={tokens && tokens[0] ? tokens[0]._quantity : 0}
+          tokenAddress={tokens && tokens[0] ? tokens[0]._address : ""}
+          chainId={tokens && tokens[0] ? tokens[0]._chainId : ""}
+        />
+        <DepositController
+          quantity={quantityTokenB}
+          setQuantity={setQuantityTokenB}
+          requiredQuantity={tokens && tokens[1] ? tokens[1]._quantity : 0}
+          tokenAddress={tokens && tokens[1] ? tokens[1]._address : ""}
+          chainId={tokens && tokens[1] ? tokens[1]._chainId : ""}
+        />
+        <DepositController
+          quantity={quantityTokenB}
+          setQuantity={setQuantityTokenB}
+          requiredQuantity={tokens && tokens[2] ? tokens[2]._quantity : 0}
+          tokenAddress={tokens && tokens[2] ? tokens[2]._address : ""}
+          chainId={tokens && tokens[2] ? tokens[2]._chainId : ""}
+        />
         <br></br>
         <br></br>
       </div>
