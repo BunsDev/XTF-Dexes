@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { DepositButton } from "./_components/DepositButton";
 import { DepositController } from "./_components/DepositController";
 import { MatrixView } from "./_components/MatrixView";
 import PieToken from "./_components/PieToken";
@@ -274,6 +275,16 @@ const ETF: NextPage = () => {
         />
         <br></br>
         <br></br>
+        <DepositButton
+          bundleId={bundleId}
+          state={vault?.state}
+          tokenAddressA={tokens && tokens[0] ? tokens[0]._address : ""}
+          quantityTokenA={quantityTokenA}
+          tokenAddressB={tokens && tokens[1] ? tokens[1]._address : ""}
+          quantityTokenB={quantityTokenB}
+          tokenAddressC={tokens && tokens[2] ? tokens[2]._address : ""}
+          quantityTokenC={quantityTokenC}
+        ></DepositButton>
       </div>
     </Watermark>
   );
