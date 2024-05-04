@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 
@@ -21,10 +22,12 @@ contract IndexAggregator {
     uint256 public lastIndexTimestamp;
 
     constructor(TokenInfo[] memory _tokenInfo, uint256 _timeWindow, uint256 _sampleSize) {
-        tokenInfo = _tokenInfo;
         sampleSize = _sampleSize;
         timeWindow = _timeWindow;
         samplingFrequency = timeWindow / sampleSize;
+        for (uint256 i = 0; i < _tokenInfo.length; i++) {
+            tokenInfo.push(_tokenInfo[i]);
+        }
         
     }
 
@@ -83,7 +86,4 @@ contract IndexAggregator {
         lastIndexTimestamp = block.timestamp;
         return true;
     }
-
-
-
 }
