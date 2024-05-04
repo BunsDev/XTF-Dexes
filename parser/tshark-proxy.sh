@@ -15,15 +15,13 @@
 # tshark -r ../captures/proxy_traffic.pcap \
 #   -Y "tcp" \
 #   -T fields \
-#   -e ip.src \
-#   -e ip.dst \
 #   -e ssl.handshake.random \
-#   -e tcp.srcport \
-#   -e tcp.dstport \
 #   -e tcp.payload \
 #   -e data \
 #   -o ssl.keylog_file:../keys.log \
 
+
+tshark  -r ../captures/proxy_traffic.pcap -Y "ssl.handshake.random and ssl.handshake.type==1" -Tfields -e frame.number -e ssl.handshake.random -e ssl.handshake.extensions_server_name
 
 
 # tshark -r ../captures/proxy_traffic.pcap \
@@ -40,4 +38,8 @@
 #   -e tcp.payload \
 #   -o tls.keylog_file:../keys.log
 
-tshark -r ../captures/proxy_traffic.pcap -Y "tls" -T fields -e tls.record.sequence
+# tshark -r ../captures/proxy_traffic.pcap \
+# -Y "ssl.handshake.type == 1 || ssl.handshake.type == 2" \
+# -T fields \
+# -e ssl.handshake.random \
+# -o ssl.keylog_file:../keys.log
