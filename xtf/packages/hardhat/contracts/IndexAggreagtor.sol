@@ -20,6 +20,7 @@ contract IndexAggregator {
     uint256 lastSampleTime;
     uint256[] public lastIndex; 
     uint256 public lastIndexTimestamp;
+    uint256 public bribeUnit;
 
     constructor(TokenInfo[] memory _tokenInfo, uint256 _timeWindow, uint256 _sampleSize) {
         sampleSize = _sampleSize;
@@ -32,7 +33,6 @@ contract IndexAggregator {
     }
 
     function collectPriceFeeds() external {
-
         require(block.timestamp - lastSampleTime >= samplingFrequency, "IndexAggregator: Sampling frequency not reached");
 
         if (block.timestamp - lastSampleTime >= timeWindow) {
@@ -54,6 +54,10 @@ contract IndexAggregator {
             }
         }
         lastSampleTime = block.timestamp;
+        // if there is enough bribe pay it to the caller
+        if (bribeUnit > 0) {
+            payable(msg.sender).transfer(bribeUnit);
+        }
     }
 
     function calculateIndex(uint256[] memory indexOrders) public returns (bool)
