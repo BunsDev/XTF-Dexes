@@ -32,7 +32,7 @@ describe("IndexAggregator", function () {
       );
       // price random
       const priceValue = Math.floor(Math.random() * 100);
-      const price = BigNumber.from(priceValue).mul(BigNumber.from("10").pow(decimalsPrice));
+      const price = BigNumber.from(priceValue).mul(BigNumber.from("10").pow(1));
       const mockAggregator = (await mockAggregatorFactory.deploy(price.toString(), decimalsPrice)) as MockAggregator;
 
       tokenInfo.push({
@@ -47,6 +47,15 @@ describe("IndexAggregator", function () {
   });
 
   describe("Deployment", function () {
+    it("Should have deployed tokens and price aggregator", async function () {
+      for (let i = 0; i < tokenNumber; i++) {
+        // hardhat connect to SimpleERC20 at address tokenInfo[i]._address
+        const token = (await ethers.getContractAt("SimpleERC20", tokenInfo[i]._address)) as SimpleERC20;
+        expect(await token.symbol()).to.equal(tokenInfo[i]._symbol);
+        expect(await token.totalSupply()).to.be.gt(0);
+      }
+    });
+
     it("Should have stored all token info in the contract", async function () {
       for (let i = 0; i < tokenNumber; i++) {
         expect(await indexAggregator.tokenInfo(i)).to.deep.equal([
@@ -56,6 +65,44 @@ describe("IndexAggregator", function () {
           tokenInfo[i]._aggregator,
         ]);
       }
+    });
+
+    it("Should collect the price for the index", async function () {
+      await indexAggregator.collectPriceFeeds();
+    });
+
+    it("Should accept the right order", async function () {
+      await ethers.provider.send("evm_increaseTime", [timeWindow]);
+      await indexAggregator.collectPriceFeeds();
+      const totalSupplies = [];
+      for (let i = 0; i < tokenNumber; i++) {
+        totalSupplies.push(
+          BigNumber.from(await indexAggregator.totalSupplies(i))
+            .div(BigNumber.from("10").pow(decimals))
+            .toNumber(),
+        );
+      }
+
+      const prices = [];
+      for (let i = 0; i < tokenNumber; i++) {
+        // get mockAggregator at address tokenInfo[i]._aggregator
+        const mockAggregator = (await ethers.getContractAt(
+          "MockAggregator",
+          tokenInfo[i]._aggregator,
+        )) as MockAggregator;
+        prices.push((await mockAggregator.latestRoundData())[1]);
+      }
+
+      const values: any[] = [];
+      for (let i = 0; i < tokenNumber; i++) {
+        values.push(BigNumber.from(totalSupplies[i]).mul(prices[i]));
+      }
+
+      // order the values by creating an array of indexes and sorting it
+      const indexes = Array.from(Array(tokenNumber).keys());
+      indexes.sort((a, b) => values[b].sub(values[a]).toNumber());
+
+      await indexAggregator.persistIndex(indexes);
     });
   });
 });

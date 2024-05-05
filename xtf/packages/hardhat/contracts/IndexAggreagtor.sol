@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 struct TokenInfo {
     string _symbol;
@@ -12,7 +13,7 @@ struct TokenInfo {
 
 contract IndexAggregator {
     TokenInfo[] public tokenInfo;
-    mapping(uint256 => uint256) public totalSupply;
+    uint256[] public totalSupplies;
     mapping(uint256 => uint256[]) public movingAverage;
     uint256 sampleSize;
     uint256 timeWindow;
@@ -28,6 +29,7 @@ contract IndexAggregator {
         samplingFrequency = timeWindow / sampleSize;
         for (uint256 i = 0; i < _tokenInfo.length; i++) {
             tokenInfo.push(_tokenInfo[i]);
+            totalSupplies.push(IERC20(_tokenInfo[i]._address).totalSupply());
         }
         
     }
@@ -35,11 +37,13 @@ contract IndexAggregator {
     function collectPriceFeeds() external {
         require(block.timestamp - lastSampleTime >= samplingFrequency, "IndexAggregator: Sampling frequency not reached");
 
-        if (block.timestamp - lastSampleTime >= timeWindow) {
-            for (uint256 i = 0; i < tokenInfo.length; i++) {
-                movingAverage[i].pop();
-            }
-        }
+        // if (block.timestamp - lastSampleTime >= timeWindow) {
+        //     for (uint256 i = 0; i < tokenInfo.length; i++) {
+        //         if (movingAverage[i].length > 0) {
+        //             movingAverage[i].pop();
+        //         }
+        //     }
+        // }
 
         for (uint256 i = 0; i < tokenInfo.length; i++) {
             (, int256 answer, , , ) = AggregatorV3Interface(tokenInfo[i]._aggregator).latestRoundData();
@@ -60,30 +64,27 @@ contract IndexAggregator {
         }
     }
 
-    function calculateIndex(uint256[] memory indexOrders) public returns (bool)
+    function persistIndex(uint256[] memory indexOrders) public returns (bool)
     {
         // indexOrders is an array index order [2,0,1] means 2nd token, 0th token, 1st token for price calculation
+
+        require(indexOrders.length == tokenInfo.length, "IndexAggregator: Invalid length of indexOrders");
+
         uint256 token_a_value;
         uint256 token_b_value;
         for (uint256 i = 0; i < indexOrders.length - 1; i++) {
             token_a_value =  0;
+            token_b_value = 0;
 
-            if(i == 0) {
-                token_b_value = 0;
-                for (uint256 j = 0; j < movingAverage[indexOrders[i]].length; j++) {
-                    token_a_value += movingAverage[indexOrders[i]][j] * totalSupply[indexOrders[i]];
-                    token_b_value += movingAverage[indexOrders[i + 1]][j] * totalSupply[indexOrders[i + 1]];
-                }
-            } else
-            {
-                for (uint256 j = 0; j < movingAverage[indexOrders[i]].length; j++) {
-                    token_a_value += movingAverage[indexOrders[i]][j] * totalSupply[indexOrders[i]];
-                }
+            for (uint256 j = 0; j < movingAverage[indexOrders[i]].length; j++) {
+                token_a_value += movingAverage[indexOrders[i]][j] * totalSupplies[indexOrders[i]];
+                token_b_value += movingAverage[indexOrders[i + 1]][j] * totalSupplies[indexOrders[i + 1]];
             }
+
 
             require(token_a_value > 0, "IndexAggregator: Token value is zero");
             require(token_b_value > 0, "IndexAggregator: Token value is zero");
-            require(token_b_value > token_a_value, "IndexAggregator: order is not correct");
+            require(token_a_value > token_b_value, "IndexAggregator: order is not correct");
         }
 
         lastIndex = indexOrders;
