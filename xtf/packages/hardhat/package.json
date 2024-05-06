@@ -18,6 +18,8 @@
   },
   "dependencies": {
     "@chainlink/contracts": "^1.1.0",
+    "@chainlink/env-enc": "^1.0.5",
+    "@chainlink/functions-toolkit": "^0.2.8",
     "@ethersproject/bignumber": "^5.7.0",
     "@openzeppelin/contracts": "~4.8.1",
     "@typechain/ethers-v6": "~0.5.1",
