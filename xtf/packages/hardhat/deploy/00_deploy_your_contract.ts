@@ -2,10 +2,13 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { FunctionsConsumer } from "../typechain-types";
 import { networks } from "../scripts/networks";
-import { SubscriptionManager, SecretsManager } from "@chainlink/functions-toolkit";
+import { SubscriptionManager, SecretsManager, Location } from "@chainlink/functions-toolkit";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { Wallet } from "@ethersproject/wallet";
-import { config } from "@chainlink/env-enc";
+import fs from "fs";
+import path from "path";
+
+// import { config } from "@chainlink/env-enc";
 /**
  * Deploys a contract named "YourContract" using the deployer account and
  * constructor arguments set to the deployer address
@@ -66,16 +69,13 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     });
 
     const secrets = {
-      privateKey: process.env.DEPLOYER_PRIVATE_KEY,
-      coingeckoKey: process.env.COINGECKO_API_KEY,
+      privateKey: process.env.DEPLOYER_PRIVATE_KEY || "",
+      coingeckoKey: process.env.COINGECKO_API_KEY || "",
     };
 
     const encryptedSecretsObj = await secretsManager.encryptSecrets(secrets);
 
-    const {
-      version, // Secrets version number (corresponds to timestamp when encrypted secrets were uploaded to DON)
-      success, // Boolean value indicating if encrypted secrets were successfully uploaded to all nodes connected to the gateway
-    } = await secretsManager.uploadEncryptedSecretsToDON({
+    const { version, success } = await secretsManager.uploadEncryptedSecretsToDON({
       encryptedSecretsHexstring: encryptedSecretsObj.encryptedSecrets,
       gatewayUrls,
       slotId,
@@ -90,10 +90,27 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
       });
 
       console.log(`\nMake a note of the encryptedSecretsReference: ${encryptedSecretsReference} `);
+
+      const source = fs.readFileSync(path.resolve(__dirname, "../sourceNormalise.js")).toString();
+
+      const args = ["layer1"];
+      const gasLimit = 300_000;
+      const requestTx = await functionConsumer.sendRequest(
+        source,
+        Location.DONHosted,
+        encryptedSecretsReference,
+        args,
+        [],
+        subID,
+        gasLimit,
+      );
+
+      const txReceipt = await requestTx.wait();
+      if (txReceipt !== null) {
+        const requestId = txReceipt.logs[0].topics[1];
+        console.log(`\nRequest made.  Request Id is ${requestId}. TxHash is ${requestTx.hash}`);
+      }
     }
-
-    
-
   }
 };
 
