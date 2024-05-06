@@ -1,12 +1,9 @@
-# Pythia 
+# Block magic Indexes
 
 
+# Coingecko API
 
-## Getting started
-
-Run the container defined in the [docker-compose](/docker-compose.dev.yml) running `npm run docker:start`. Ensure Google Chrome is closed and run the browser with `npm run browser` this will set an env varialbe to store client file key SSLKEYLOGFILE. 
-
-
-For the parser use `cd parser` and `source venv/bin/activate`
-
-![picture](/pic.webp)
+curl --request GET \
+     --url https://pro-api.coingecko.com/api/v3/coins/categories \
+     --header 'accept: application/json' \
+     --header 'x-cg-pro-api-key: $API'
