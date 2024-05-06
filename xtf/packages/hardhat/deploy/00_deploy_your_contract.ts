@@ -20,7 +20,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   if (hre.network.name === "sepolia") {
     const network = networks["ethereumSepolia"];
 
-    const subID = 7338; //https://vrf.chain.link/sepolia/7338
+    const subID = 2587; // https://functions.chain.link/sepolia/2587
     const routerAddress = network.functionsRouter;
 
     const donId = network.donId;
@@ -53,13 +53,6 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
       consumerAddress: await functionConsumer.getAddress(),
     });
   }
-
-  // https://functions.chain.link/sepolia/2587
-
-  const functionConsumer = await hre.ethers.getContract<FunctionsConsumer>("FunctionConsumer", deployer);
-  SubscriptionManager// const yourContract = await hre.ethers.getContract<Contract>("YourContract", deployer);
-  .console
-    .log("👋 Initial greeting:");
 };
 
 export default deployYourContract;
