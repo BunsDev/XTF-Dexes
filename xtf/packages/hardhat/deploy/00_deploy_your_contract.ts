@@ -1,12 +1,11 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { FunctionsConsumer } from "../typechain-types";
-import { Contract } from "ethers";
 import { networks } from "../scripts/networks";
-import { SubscriptionManager } from "@chainlink/functions-toolkit";
+import { SubscriptionManager, SecretsManager } from "@chainlink/functions-toolkit";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { Wallet } from "@ethersproject/wallet";
-
+import { config } from "@chainlink/env-enc";
 /**
  * Deploys a contract named "YourContract" using the deployer account and
  * constructor arguments set to the deployer address
@@ -15,7 +14,6 @@ import { Wallet } from "@ethersproject/wallet";
  */
 const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
-  const signers = await hre.ethers.getSigners();
   const { deploy } = hre.deployments;
   if (hre.network.name === "sepolia") {
     const network = networks["ethereumSepolia"];
@@ -29,9 +27,14 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
     const linkTokenAddress = network.linkToken;
 
-    const privateKey = process.env.DEPLOYER_PRIVATE_KEY || "";
+    const gatewayUrls = network.gatewayUrls;
 
-    const provider = new JsonRpcProvider("https://node.ghostnet.etherlink.com");
+    const slotId = 0;
+
+    const minutesUntilExpiration = 60;
+
+    const privateKey = process.env.DEPLOYER_PRIVATE_KEY || "";
+    const provider = new JsonRpcProvider(process.env.SEPOLIA_RPC_URL || "");
     const wallet = new Wallet(privateKey).connect(provider);
 
     const subscriptionManager = new SubscriptionManager({
@@ -39,6 +42,15 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
       linkTokenAddress,
       functionsRouterAddress: routerAddress,
     });
+
+    const secretsManager = new SecretsManager({
+      signer: wallet,
+      functionsRouterAddress: routerAddress,
+      donId,
+    });
+
+    await subscriptionManager.initialize();
+    await secretsManager.initialize();
 
     deploy("FunctionConsumer", {
       from: deployer,
@@ -52,6 +64,33 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
       subscriptionId: subID,
       consumerAddress: await functionConsumer.getAddress(),
     });
+
+    const secrets = {
+      privateKey: process.env.DEPLOYER_PRIVATE_KEY,
+      coingeckoKey: process.env.COINGECKO_API_KEY,
+    };
+
+    const encryptedSecretsObj = await secretsManager.encryptSecrets(secrets);
+
+    const {
+      version, // Secrets version number (corresponds to timestamp when encrypted secrets were uploaded to DON)
+      success, // Boolean value indicating if encrypted secrets were successfully uploaded to all nodes connected to the gateway
+    } = await secretsManager.uploadEncryptedSecretsToDON({
+      encryptedSecretsHexstring: encryptedSecretsObj.encryptedSecrets,
+      gatewayUrls,
+      slotId,
+      minutesUntilExpiration,
+    });
+
+    if (success) {
+      console.log("\nUploaded secrets to DON...");
+      const encryptedSecretsReference = secretsManager.buildDONHostedEncryptedSecretsReference({
+        slotId,
+        version,
+      });
+
+      console.log(`\nMake a note of the encryptedSecretsReference: ${encryptedSecretsReference} `);
+    }
   }
 };
 
