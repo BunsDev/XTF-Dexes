@@ -10,13 +10,16 @@ function normalizeValues(value) {
   return Math.max(1, Math.min(1000, normalized));
 }
 
+function toBasisPoints(normalizedScores) {
+  const totalScore = normalizedScores.reduce((acc, score) => acc + score, 0);
+  return normalizedScores.map(score => (score / totalScore) * 10000);
+}
+
 function calculateQuantities(prices, percentages) {
   const normalizedScores = percentages.map(p => normalizeValues(p));
-  const totalScore = normalizedScores.reduce((acc, score) => acc + score, 0);
-  const initialQuantities = normalizedScores.map(score => (score / totalScore) * 1000);
-
+  const bps = toBasisPoints(normalizedScores);
   const totalFunds = 10000;
-  let adjustedQuantities = prices.map((price, index) => (totalFunds / price) * (initialQuantities[index] / totalScore));
+  let adjustedQuantities = prices.map((price, index) => (totalFunds / price) * (bps[index] / 10000));
   const sumAdjustedQuantities = adjustedQuantities.reduce((acc, qty) => acc + qty, 0);
   const finalQuantities = adjustedQuantities.map(qty => (qty / sumAdjustedQuantities) * 1000);
 
@@ -34,41 +37,30 @@ if (apiResponse.error) {
 let symbols = "";
 let totalMarketCap = 0;
 
-for (i = 0; i < 30; i++) {
+for (let i = 0; i < 30; i++) {
   symbols += "," + apiResponse.data[i].symbol;
   totalMarketCap += Number(apiResponse.data[i].market_cap);
-  // console.log(apiResponse.data[i].id)
 }
 
 symbols = symbols.substring(1) + "|";
 
-percentages = [];
-prices = [];
-bps = [];
+let percentages = [];
+let prices = [];
+let bps = [];
 
-for (i = 0; i < 30; i++) {
-  // symbols += "," + normalizeValues(Number(apiResponse.data[i].market_cap)/totalMarketCap);
+for (let i = 0; i < 30; i++) {
   prices.push(apiResponse.data[i].current_price);
   percentages.push(Number(apiResponse.data[i].market_cap) / totalMarketCap);
-  bps.push(normalizeValues(normalizeValues(Number(apiResponse.data[i].market_cap) / totalMarketCap)));
 }
 
-console.log(calculateQuantities(prices, percentages));
+bps = toBasisPoints(percentages.map(p => normalizeValues(p)));
 
-symbols += "|" + totalMarketCap;
 
-// console.log(symbols)
-// return Functions.encodeString(symbols);
 
-const complexData = {
-  totalValues: totalMarketCap,
-  symbols: symbols,
-  quantities: bps,
-};
+const types = ["uint256", "string", "uint256[]"];
+const encodedData = abiCoder.encode(types, [totalMarketCap, symbols, bps]);
 
-const types = ["uint256", "string[]", "uint256[]"];
-const encodedData = abiCoder.encode(types, [complexData]);
-
+console.log(encodedData);
 console.log(complexData);
 
 return ethers.getBytes(encodedData);
