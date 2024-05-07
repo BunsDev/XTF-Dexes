@@ -1,6 +1,6 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
-import { FunctionsConsumer } from "../typechain-types";
+import { IndexCentralisedData } from "../typechain-types";
 import { networks } from "../scripts/networks";
 import { SubscriptionManager, SecretsManager, Location } from "@chainlink/functions-toolkit";
 import { JsonRpcProvider } from "@ethersproject/providers";
@@ -55,17 +55,17 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     await subscriptionManager.initialize();
     await secretsManager.initialize();
 
-    deploy("FunctionConsumer", {
+    deploy("IndexCentralisedData", {
       from: deployer,
       args: [routerAddress, donIdBytes32],
       log: true,
     });
 
-    const functionConsumer = await hre.ethers.getContract<FunctionsConsumer>("FunctionConsumer", deployer);
+    const IndexCentralisedDataContract = await hre.ethers.getContract<IndexCentralisedData>("IndexCentralisedData", deployer);
 
     await subscriptionManager.addConsumer({
       subscriptionId: subID,
-      consumerAddress: await functionConsumer.getAddress(),
+      consumerAddress: await IndexCentralisedDataContract.getAddress(),
     });
 
     const secrets = {
@@ -95,7 +95,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
       const args = ["layer1"];
       const gasLimit = 300_000;
-      const requestTx = await functionConsumer.sendRequest(
+      const requestTx = await IndexCentralisedDataContract.sendRequest(
         source,
         Location.DONHosted,
         encryptedSecretsReference,

@@ -5,17 +5,26 @@ import {FunctionsClient} from "@chainlink/contracts/src/v0.8/functions/v1_0_0/Fu
 import {ConfirmedOwner} from "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol";
 import {FunctionsRequest} from "@chainlink/contracts/src/v0.8/functions/v1_0_0/libraries/FunctionsRequest.sol";
 
+struct AssetData {
+    uint256 totalValues;
+    string[] symbols;
+    uint256[] quantities;
+}
+
+
 /**
- * @title Chainlink Functions example on-demand consumer contract example
+ * @title Centralised Index Contract
  */
-contract FunctionsConsumer is FunctionsClient, ConfirmedOwner {
+contract IndexCentralisedData is FunctionsClient, ConfirmedOwner {
   using FunctionsRequest for FunctionsRequest.Request;
 
-  bytes32 public donId; // DON ID for the Functions DON to which the requests are sent
+  bytes32 public donId;
 
   bytes32 public s_lastRequestId;
   bytes public s_lastResponse;
   bytes public s_lastError;
+  uint256 public s_lastResponseTime;
+  AssetData public assetData;
 
   constructor(address router, bytes32 _donId) FunctionsClient(router) ConfirmedOwner(msg.sender) {
     donId = _donId;
@@ -70,6 +79,9 @@ contract FunctionsConsumer is FunctionsClient, ConfirmedOwner {
    */
   function fulfillRequest(bytes32 requestId, bytes memory response, bytes memory err) internal override {
     s_lastResponse = response;
+    s_lastRequestId = requestId;
     s_lastError = err;
+    s_lastResponseTime = block.timestamp;
+    assetData = abi.decode(response, (AssetData));
   }
 }

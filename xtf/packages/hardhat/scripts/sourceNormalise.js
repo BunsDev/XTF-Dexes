@@ -35,5 +35,4 @@ symbols += "|" + totalMarketCap;
 console.log(symbols);
 return Functions.encodeString();
 
-
 // btc,eth,usdt,bnb,sol,usdc,xrp,steth,doge,ton,ada,shib,avax,trx,wbtc,dot,bch,link,near,matic,ltc,icp,fet,uni,leo,dai,hbar,etc,apt,rndr|,920,745,573,544,504,405,392,385,352,339,310,293,292,255,248,248,242,232,222,204,193,193,192,187,181,181,153,152,149,148|2170086872214

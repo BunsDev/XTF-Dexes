@@ -21,7 +21,7 @@ function calculateQuantities(prices, percentages) {
   const totalFunds = 10000;
   let adjustedQuantities = prices.map((price, index) => (totalFunds / price) * (bps[index] / 10000));
   const sumAdjustedQuantities = adjustedQuantities.reduce((acc, qty) => acc + qty, 0);
-  const finalQuantities = adjustedQuanti
+  const finalQuantities = adjustedQuanti;
   ties.map(qty => (qty / sumAdjustedQuantities) * 1000);
 
   return finalQuantities;
@@ -55,8 +55,6 @@ for (let i = 0; i < 30; i++) {
 }
 
 bps = toBasisPoints(percentages.map(p => normalizeValues(p)));
-
-
 
 const types = ["uint256", "string", "uint256[]"];
 const encodedData = abiCoder.encode(types, [totalMarketCap, symbols, bps]);
