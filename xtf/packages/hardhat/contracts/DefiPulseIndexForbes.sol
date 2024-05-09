@@ -22,8 +22,7 @@ contract Attestor {
 
   function verifyProof(Reclaim.Proof memory proof) public view{
       Reclaim(reclaimAddress).verifyProof(proof, providersHashes);
-      // TODO: your business logic upon success
-      // verify proof.context is what you expect
+      
   }
 }
 

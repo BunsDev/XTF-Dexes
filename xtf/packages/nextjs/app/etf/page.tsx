@@ -10,7 +10,7 @@ import TokenBalanceAllowance from "./_components/tokenBalanceAllowance";
 import "./index.css";
 import { Watermark } from "antd";
 import type { NextPage } from "next";
-import { useAccount, useContractRead, useNetwork } from "wagmi";
+import { useAccount, useContractRead } from "wagmi";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { getParsedError, notification } from "~~/utils/scaffold-eth";
@@ -32,13 +32,12 @@ const ETF: NextPage = () => {
   // const [resultFee, setResultFee] = useState<any>();
   // const [txValue, setTxValue] = useState<string | bigint>("");
   const writeTxn = useTransactor();
-  const { chain } = useNetwork();
 
   const { targetNetwork } = useTargetNetwork();
+  const { chain} = useAccount();
   const writeDisabled = !chain || chain?.id !== targetNetwork.id;
-  const { address: connectedAddress } = useAccount();
 
-  const contractName = "ETFIssuingChain";
+  const contractName = "ETFIssuing";
 
   const { isFetching: isFetToken, refetch: tokensFetch } = useContractRead({
     address: contractsData[contractName].address,

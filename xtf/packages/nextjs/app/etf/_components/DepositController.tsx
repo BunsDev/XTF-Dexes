@@ -33,7 +33,7 @@ export function DepositController({
   } = useContractWrite({
     address: tokenAddress,
     functionName: "approve",
-    abi: contractsData[contractSimpleName].abi,
+    abi: contractsData[contractSimpleName]?.abi,
     args: [contractsData[contractName].address, quantity],
   });
 

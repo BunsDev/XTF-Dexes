@@ -21,7 +21,7 @@ const TokenBalanceAllowance: React.FC<TokenBalanceAllowanceProps> = ({ name, tok
   const { isFetching: isFet, refetch: fetchBalance } = useContractRead({
     address: tokenAddress,
     functionName: "balanceOf",
-    abi: contractsData[contractSimpleName].abi,
+    abi: contractsData[contractSimpleName]?.abi,
     args: [connectedAddress],
     enabled: false,
     onError: (error: any) => {
@@ -37,14 +37,14 @@ const TokenBalanceAllowance: React.FC<TokenBalanceAllowanceProps> = ({ name, tok
   } = useContractWrite({
     address: tokenAddress,
     functionName: "approve",
-    abi: contractsData[contractSimpleName].abi,
+    abi: contractsData[contractSimpleName]?.abi,
     args: [contractsData[contractName].address, balance],
   });
 
   const { isFetching: isFetAllow, refetch: fetchAllowance } = useContractRead({
     address: tokenAddress,
     functionName: "allowance",
-    abi: contractsData[contractSimpleName].abi,
+    abi: contractsData[contractSimpleName]?.abi,
     args: [connectedAddress, contractsData[contractName].address],
     enabled: false,
     onError: (error: any) => {
