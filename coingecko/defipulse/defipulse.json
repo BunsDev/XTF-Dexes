@@ -1,0 +1,138 @@
+{
+  "components": [
+    {
+      "address": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+      "id": "uniswap",
+      "quantity": "3.265558564288540111",
+      "symbol": "UNI",
+      "name": "Uniswap",
+      "image": "https://assets.coingecko.com/coins/images/12504/small/uniswap-uni.png?1600306604",
+      "totalPriceUsd": "23.90388869059211361252",
+      "dailyPercentChange": "-2.221322223421208",
+      "percentOfSet": "25.27",
+      "percentOfSetNumber": 25.27
+    },
+    {
+      "address": "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2",
+      "id": "maker",
+      "quantity": "0.008254408549415601",
+      "symbol": "MKR",
+      "name": "Maker",
+      "image": "https://assets.coingecko.com/coins/images/1364/small/Mark_Maker.png?1585191826",
+      "totalPriceUsd": "22.17365259812414065428",
+      "dailyPercentChange": "-5.081692370156998",
+      "percentOfSet": "23.44",
+      "percentOfSetNumber": 23.44
+    },
+    {
+      "address": "0x5A98FcBEA516Cf06857215779Fd812CA3beF1B32",
+      "id": "lido dao",
+      "quantity": "7.59916861796704508",
+      "symbol": "LDO",
+      "name": "Lido DAO",
+      "image": "https://assets.coingecko.com/coins/images/13573/thumb/Lido_DAO.png?1609873644",
+      "totalPriceUsd": "14.1344536294187038488",
+      "dailyPercentChange": "-6.4971275201319605",
+      "percentOfSet": "14.94",
+      "percentOfSetNumber": 14.94
+    },
+    {
+      "address": "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
+      "id": "aave",
+      "quantity": "0.131554621848272076",
+      "symbol": "AAVE",
+      "name": "AAVE",
+      "image": "https://assets.coingecko.com/coins/images/12645/small/AAVE.png?1601374110",
+      "totalPriceUsd": "11.29133319323719228308",
+      "dailyPercentChange": "-4.161147795558475",
+      "percentOfSet": "11.93",
+      "percentOfSetNumber": 11.93
+    },
+    {
+      "address": "0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F",
+      "id": "synthetix network token",
+      "quantity": "2.877433470098549449",
+      "symbol": "SNX",
+      "name": "Synthetix Network Token",
+      "image": "https://assets.coingecko.com/coins/images/3406/small/SNX.png?1598631139",
+      "totalPriceUsd": "7.33745534875130109495",
+      "dailyPercentChange": "-4.419763751028481",
+      "percentOfSet": "7.76",
+      "percentOfSetNumber": 7.76
+    },
+    {
+      "address": "0x808507121B80c02388fAd14726482e061B8da827",
+      "id": "pendle",
+      "quantity": "1.047263686654667446",
+      "symbol": "PENDLE",
+      "name": "Pendle",
+      "image": "https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x808507121B80c02388fAd14726482e061B8da827/logo.png",
+      "totalPriceUsd": "4.83835823234456360052",
+      "dailyPercentChange": "-4.009211470404374",
+      "percentOfSet": "5.11",
+      "percentOfSetNumber": 5.11
+    },
+    {
+      "address": "0xD33526068D116cE69F19A9ee46F0bd304F21A51f",
+      "id": "rocket pool",
+      "quantity": "0.186733187486176582",
+      "symbol": "RPL",
+      "name": "Rocket Pool",
+      "image": "https://assets.coingecko.com/coins/images/2090/small/rocket_pool_%28RPL%29.png?1637662441",
+      "totalPriceUsd": "3.7440004090978404691",
+      "dailyPercentChange": "-2.167199631787733",
+      "percentOfSet": "3.96",
+      "percentOfSetNumber": 3.96
+    },
+    {
+      "address": "0xc00e94Cb662C3520282E6f5717214004A7f26888",
+      "id": "compound",
+      "quantity": "0.059822095650670878",
+      "symbol": "COMP",
+      "name": "Compound",
+      "image": "https://assets.coingecko.com/coins/images/10775/small/COMP.png?1592625425",
+      "totalPriceUsd": "3.33986760017695511874",
+      "dailyPercentChange": "-1.0917087862150576",
+      "percentOfSet": "3.53",
+      "percentOfSetNumber": 3.53
+    },
+    {
+      "address": "0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e",
+      "id": "yearn.finance",
+      "quantity": "0.00029836316302136",
+      "symbol": "YFI",
+      "name": "yearn.finance",
+      "image": "https://assets.coingecko.com/coins/images/11849/small/yfi-192x192.png?1598325330",
+      "totalPriceUsd": "2.0778249363337927488",
+      "dailyPercentChange": "0.4578481251853715",
+      "percentOfSet": "2.20",
+      "percentOfSetNumber": 2.2
+    },
+    {
+      "address": "0xba100000625a3754423978a60c9317c58a424e3D",
+      "id": "balancer",
+      "quantity": "0.502967166792091586",
+      "symbol": "BAL",
+      "name": "Balancer",
+      "image": "https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0xba100000625a3754423978a60c9317c58a424e3D/logo.png",
+      "totalPriceUsd": "1.7352367254327159717",
+      "dailyPercentChange": "-2.9077775303489073",
+      "percentOfSet": "1.83",
+      "percentOfSetNumber": 1.83
+    },
+    {
+      "address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+      "id": "wrapped ether",
+      "quantity": "0.000010926727319182",
+      "symbol": "WETH",
+      "name": "Wrapped Ether",
+      "image": "https://assets.coingecko.com/coins/images/2518/small/weth.png?1628852295",
+      "totalPriceUsd": "0.03240178939048272734",
+      "dailyPercentChange": "-2.585360414740965",
+      "percentOfSet": "0.03",
+      "percentOfSetNumber": 0.03
+    }
+  ],
+  "vAssets": [],
+  "navUsd": 94.6084731528998
+}
