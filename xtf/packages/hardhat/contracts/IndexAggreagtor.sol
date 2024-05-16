@@ -19,7 +19,7 @@ contract IndexAggregator {
     uint256 timeWindow;
     uint256 samplingFrequency;
     uint256 lastSampleTime;
-    uint256[] public lastIndex; 
+    uint256[] public lastIndexOrder; 
     uint256 public lastIndexTimestamp;
     uint256 public bribeUnit;
 
@@ -87,7 +87,7 @@ contract IndexAggregator {
             require(token_a_value > token_b_value, "IndexAggregator: order is not correct");
         }
 
-        lastIndex = indexOrders;
+        lastIndexOrder = indexOrders;
         lastIndexTimestamp = block.timestamp;
         return true;
     }

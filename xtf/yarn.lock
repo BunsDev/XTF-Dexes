@@ -60,7 +60,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ant-design/icons@npm:^5.3.6":
+"@ant-design/icons@npm:^5.3.7":
   version: 5.3.7
   resolution: "@ant-design/icons@npm:5.3.7"
   dependencies:
@@ -3099,7 +3099,7 @@ __metadata:
     "@uniswap/sdk-core": ~4.0.1
     "@uniswap/v2-sdk": ~3.0.1
     abitype: 1.0.2
-    antd: ^5.17.0
+    antd: latest
     apexcharts: ^3.49.0
     autoprefixer: ~10.4.12
     blo: ~1.0.1
@@ -5487,13 +5487,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"antd@npm:^5.17.0":
-  version: 5.17.0
-  resolution: "antd@npm:5.17.0"
+"antd@npm:latest":
+  version: 5.17.2
+  resolution: "antd@npm:5.17.2"
   dependencies:
     "@ant-design/colors": ^7.0.2
     "@ant-design/cssinjs": ^1.19.1
-    "@ant-design/icons": ^5.3.6
+    "@ant-design/icons": ^5.3.7
     "@ant-design/react-slick": ~1.1.2
     "@babel/runtime": ^7.24.5
     "@ctrl/tinycolor": ^3.6.1
@@ -5511,7 +5511,7 @@ __metadata:
     rc-dialog: ~9.4.0
     rc-drawer: ~7.1.0
     rc-dropdown: ~4.2.0
-    rc-field-form: ~2.0.0
+    rc-field-form: ~2.0.1
     rc-image: ~7.6.0
     rc-input: ~1.4.5
     rc-input-number: ~9.0.0
@@ -5525,7 +5525,7 @@ __metadata:
     rc-rate: ~2.12.0
     rc-resize-observer: ^1.4.0
     rc-segmented: ~2.3.0
-    rc-select: ~14.13.1
+    rc-select: ~14.13.3
     rc-slider: ~10.6.2
     rc-steps: ~6.0.1
     rc-switch: ~4.1.0
@@ -5533,16 +5533,16 @@ __metadata:
     rc-tabs: "~15.0.0 "
     rc-textarea: ~1.6.3
     rc-tooltip: ~6.2.0
-    rc-tree: ~5.8.5
+    rc-tree: ~5.8.7
     rc-tree-select: ~5.20.0
     rc-upload: ~4.5.2
-    rc-util: ^5.39.1
+    rc-util: ^5.39.3
     scroll-into-view-if-needed: ^3.1.0
     throttle-debounce: ^5.0.0
   peerDependencies:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: e8dd37166b13e13da931ba8603e61d9c25157cc510ac379ea9d61e08a1832d56d2c8d54b6b27d5a675fbb1b09db9ddadaabb98cc8b95f93ce3199f9083d5c093
+  checksum: 61bbadd78f1ff62caf2adf977b5acfe97ea1a91ab8e98dc0aa22aa5bcb39a9e8429bdcbbf3cbadd80249aa626697a2ad94b5350b889a1b5b8bd5a7f3fa73d304
   languageName: node
   linkType: hard
 
@@ -14115,7 +14115,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rc-field-form@npm:~2.0.0":
+"rc-field-form@npm:~2.0.1":
   version: 2.0.1
   resolution: "rc-field-form@npm:2.0.1"
   dependencies:
@@ -14357,7 +14357,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rc-select@npm:~14.13.0, rc-select@npm:~14.13.1":
+"rc-select@npm:~14.13.0, rc-select@npm:~14.13.3":
   version: 14.13.3
   resolution: "rc-select@npm:14.13.3"
   dependencies:
@@ -14498,7 +14498,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rc-tree@npm:~5.8.1, rc-tree@npm:~5.8.5":
+"rc-tree@npm:~5.8.1, rc-tree@npm:~5.8.7":
   version: 5.8.7
   resolution: "rc-tree@npm:5.8.7"
   dependencies:
@@ -14528,7 +14528,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rc-util@npm:^5.0.1, rc-util@npm:^5.16.1, rc-util@npm:^5.17.0, rc-util@npm:^5.18.1, rc-util@npm:^5.2.0, rc-util@npm:^5.20.1, rc-util@npm:^5.21.0, rc-util@npm:^5.24.4, rc-util@npm:^5.25.2, rc-util@npm:^5.27.0, rc-util@npm:^5.28.0, rc-util@npm:^5.30.0, rc-util@npm:^5.31.1, rc-util@npm:^5.32.2, rc-util@npm:^5.34.1, rc-util@npm:^5.35.0, rc-util@npm:^5.36.0, rc-util@npm:^5.37.0, rc-util@npm:^5.38.0, rc-util@npm:^5.38.1, rc-util@npm:^5.39.1":
+"rc-util@npm:^5.0.1, rc-util@npm:^5.16.1, rc-util@npm:^5.17.0, rc-util@npm:^5.18.1, rc-util@npm:^5.2.0, rc-util@npm:^5.20.1, rc-util@npm:^5.21.0, rc-util@npm:^5.24.4, rc-util@npm:^5.25.2, rc-util@npm:^5.27.0, rc-util@npm:^5.28.0, rc-util@npm:^5.30.0, rc-util@npm:^5.31.1, rc-util@npm:^5.32.2, rc-util@npm:^5.34.1, rc-util@npm:^5.35.0, rc-util@npm:^5.36.0, rc-util@npm:^5.37.0, rc-util@npm:^5.38.0, rc-util@npm:^5.38.1, rc-util@npm:^5.39.3":
   version: 5.39.3
   resolution: "rc-util@npm:5.39.3"
   dependencies:
