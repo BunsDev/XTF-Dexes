@@ -1,5 +1,6 @@
 "use client";
 
+import * as meme from "../../../../../coingecko/categories/meme-token.json";
 import * as category from "../../../../../coingecko/category.json";
 import { Avatar, Card, Col, Divider, Row } from "antd";
 import type { NextPage } from "next";
@@ -28,6 +29,8 @@ const Debug: NextPage = () => {
         <Divider orientation="left"></Divider>
         <Row gutter={130}>
           {category
+            // get the first 10 categories
+            .slice(0, 16)
             .filter(c => c.content !== "")
             .map(c => (
               <Col span={8} key={c.name}>
@@ -66,6 +69,17 @@ const Debug: NextPage = () => {
               </Col>
             ))}
         </Row>
+      </div>
+      <Divider></Divider>
+      <div className="text-center mt-8 p-10">
+        <h1
+          style={{
+            fontSize: "2rem",
+            marginBottom: "1rem",
+          }}
+        >
+          Meme Coins
+        </h1>
       </div>
     </>
   );

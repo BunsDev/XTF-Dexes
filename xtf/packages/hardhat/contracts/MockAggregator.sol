@@ -4,6 +4,8 @@ import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interf
 
 contract MockAggregator is AggregatorV3Interface {
     int256 private price;
+    // array of batch prices to fetch / pop and if empty return price
+    int256[] private prices;
     uint8 private dec;
 
     constructor(int256 _price, uint8 _decimals) {
@@ -13,6 +15,10 @@ contract MockAggregator is AggregatorV3Interface {
 
     function setPrice(int256 _price) external {
         price = _price;
+    }
+
+    function setPrices(int256[] memory _prices) external {
+        prices = _prices;
     }
 
     function decimals() public view override returns (uint8) {
@@ -44,6 +50,26 @@ contract MockAggregator is AggregatorV3Interface {
         return (_roundId, 0, 0, 0, 0);
     }
 
+
+   function latestRoundedData()
+        external
+        returns (
+            uint80 roundId,
+            int256 answer,
+            uint256 startedAt,
+            uint256 updatedAt,
+            uint80 answeredInRound
+        )
+    {
+        // if prices is empty return price otherwise pop price
+        if (prices.length > 0) {
+            price = prices[prices.length - 1];
+            prices.pop();
+        }
+        return (0, price, 0, 0, 0);
+    }
+    
+
     function latestRoundData()
         external
         view
@@ -56,6 +82,7 @@ contract MockAggregator is AggregatorV3Interface {
             uint80 answeredInRound
         )
     {
+        // if prices is empty return price otherwise pop price
         return (0, price, 0, 0, 0);
     }
 }
