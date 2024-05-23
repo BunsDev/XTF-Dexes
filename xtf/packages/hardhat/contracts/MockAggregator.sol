@@ -11,6 +11,10 @@ contract MockAggregator is AggregatorV3Interface {
         dec = _decimals;
     }
 
+    function setPrice(int256 _price) external {
+        price = _price;
+    }
+
     function decimals() public view override returns (uint8) {
         return dec;
     }
