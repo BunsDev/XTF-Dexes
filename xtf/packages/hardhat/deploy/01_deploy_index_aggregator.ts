@@ -9,8 +9,11 @@ import * as markets from "../../../../coingecko/market.json";
 import * as category from "../../../../coingecko/category.json";
 import fs from "fs";
 import path from "path";
+import { BigNumber } from "@ethersproject/bignumber";
 
 const categoryObject = new Map<string, any[]>();
+
+const tokenDetails = new Map<string, any>();
 
 const tokenInfo = [] as any[];
 
@@ -26,12 +29,13 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deploy } = hre.deployments;
   if (hre.network.name === "sepolia") {
     const network = networks["ethereumSepolia"];
+    const sepoliaChainId = 11155111;
 
-    await deploy("MockAggregator", {
-      from: deployer,
-      args: [100, 8],
-      log: true,
-    });
+    // await deploy("MockAggregator", {
+    //   from: deployer,
+    //   args: [100, 8],
+    //   log: true,
+    // });
 
     // tokenInfo.push({
     //   _symbol: await simpleERC20.symbol(),
@@ -41,7 +45,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     // });
 
     const marketArray = Object.values(markets);
-    const categoryArray = Object.values(category);
+    const categoryArray = Object.values(category).slice(0, 1);
 
     for (let i = 0; i < categoryArray.length; i++) {
       const category = categoryArray[i];
@@ -64,19 +68,62 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
         for (let j = 0; j < categoryDataJSON.length; j++) {
           const market = categoryDataJSON[j];
           const symbol = market?.symbol;
-          // const id = market?.id;
           const priceObject = marketArray.find(m => m.symbol === symbol);
           if (priceObject !== undefined) {
-            categoryObject.get(categoryID)?.push(priceObject);
+            categoryObject.get(categoryID)?.push(symbol);
+            if (tokenDetails.get(symbol) === undefined) {
+              const decimals = 8;
+              const circulatingSupply = BigNumber.from(String(priceObject.circulating_supply).replace(".", "")).mul(
+                BigNumber.from("10").pow(
+                  decimals - (String(priceObject.circulating_supply).split(".")[1]?.length || 0),
+                ),
+              );
+              console.log("PRICEEE", circulatingSupply);
+
+              tokenDetails.set(symbol, priceObject);
+              console.log(symbol, priceObject.current_price, priceObject.circulating_supply, priceObject.name);
+              await deploy("SimpleERC20", {
+                from: deployer,
+                args: [priceObject.name, priceObject.symbol, circulatingSupply],
+                log: true,
+              });
+
+              const currentPrice = BigNumber.from(String(priceObject.current_price).replace(".", "")).mul(
+                BigNumber.from("10").pow(decimals - (String(priceObject.current_price).split(".")[1]?.length || 0)),
+              );
+
+              await deploy("MockAggregator", {
+                from: deployer,
+                args: [currentPrice, decimals],
+                log: true,
+              });
+
+              const simpleERC20 = await hre.ethers.getContract("SimpleERC20");
+              const mockAggregator = await hre.ethers.getContract("MockAggregator");
+
+              tokenInfo.push({
+                _symbol: priceObject.symbol,
+                _address: await simpleERC20.getAddress(),
+                _chainId: sepoliaChainId,
+                _aggregator: await mockAggregator.getAddress(),
+              });
+            }
           }
         }
-      } catch (e) {}
+      } catch (e) {
+        console.log(e);
+      }
     }
+
+    await deploy("IndexAggregator", {
+      from: deployer,
+      args: [tokenInfo, 60, 5],
+      log: true,
+    });
 
     for (let i = 0; i < categoryArray.length; i++) {
       console.log(categoryArray[i]?.id, categoryObject.get(categoryArray[i]?.id)?.length);
     }
-
   }
 };
 

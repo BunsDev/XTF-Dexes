@@ -13,6 +13,8 @@ struct TokenInfo {
 
 contract IndexAggregator {
     TokenInfo[] public tokenInfo;
+    mapping(string => uint256) public tokens;
+    string[] public tokenSymbols;
     uint256[] public totalSupplies;
     mapping(uint256 => uint256[]) public movingAverage;
     uint256 sampleSize;
@@ -29,9 +31,10 @@ contract IndexAggregator {
         samplingFrequency = timeWindow / sampleSize;
         for (uint256 i = 0; i < _tokenInfo.length; i++) {
             tokenInfo.push(_tokenInfo[i]);
+            tokenSymbols.push(_tokenInfo[i]._symbol);
+            tokens[_tokenInfo[i]._symbol] = i;
             totalSupplies.push(IERC20(_tokenInfo[i]._address).totalSupply());
         }
-        
     }
 
     function collectPriceFeeds() external {
