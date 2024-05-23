@@ -26,12 +26,12 @@ contract SimpleERC20 is ISimpleERC20, ERC20 {
         owner = _owner;
     }
 
-    function mint(address to, uint256 amount) public {
+    function mint(address to, uint256 amount) public override {
         require(msg.sender == owner, "SimpleERC20: only owner can mint");
         _mint(to, amount);
     }
 
-    function burn(address sender, uint256 amount) public {
+    function burn(address sender, uint256 amount) public override {
         _burn(sender, amount);
     }
 

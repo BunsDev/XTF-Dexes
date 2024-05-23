@@ -5,8 +5,14 @@ import { networks } from "../scripts/networks";
 import { SubscriptionManager, SecretsManager, Location } from "@chainlink/functions-toolkit";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { Wallet } from "@ethersproject/wallet";
+import * as markets from "../../../../coingecko/market.json";
+import * as category from "../../../../coingecko/category.json";
 import fs from "fs";
 import path from "path";
+
+const categoryObject = new Map<string, any[]>();
+
+const tokenInfo = [] as any[];
 
 // import { config } from "@chainlink/env-enc";
 /**
@@ -21,64 +27,56 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   if (hre.network.name === "sepolia") {
     const network = networks["ethereumSepolia"];
 
-    // for testing purposes we can deploy only one price aggregator and update 
-
-    deploy("IndexCentralisedData", {
+    await deploy("MockAggregator", {
       from: deployer,
-      args: [routerAddress, donIdBytes32],
+      args: [100, 8],
       log: true,
     });
 
-    const IndexCentralisedDataContract = await hre.ethers.getContract<IndexCentralisedData>("IndexCentralisedData", deployer);
+    // tokenInfo.push({
+    //   _symbol: await simpleERC20.symbol(),
+    //   _address: await simpleERC20.getAddress(),
+    //   _chainId: chainId,
+    //   _aggregator: await mockAggregator.getAddress(),
+    // });
 
-    await subscriptionManager.addConsumer({
-      subscriptionId: subID,
-      consumerAddress: await IndexCentralisedDataContract.getAddress(),
-    });
+    const marketArray = Object.values(markets);
+    const categoryArray = Object.values(category);
 
-    const secrets = {
-      privateKey: process.env.DEPLOYER_PRIVATE_KEY || "",
-      coingeckoKey: process.env.COINGECKO_API_KEY || "",
-    };
+    for (let i = 0; i < categoryArray.length; i++) {
+      const category = categoryArray[i];
+      const categoryID = category?.id;
 
-    const encryptedSecretsObj = await secretsManager.encryptSecrets(secrets);
+      // load the file at `../../../../coingecko/categories/${categoryID}.json`
+      // and parse it]
 
-    const { version, success } = await secretsManager.uploadEncryptedSecretsToDON({
-      encryptedSecretsHexstring: encryptedSecretsObj.encryptedSecrets,
-      gatewayUrls,
-      slotId,
-      minutesUntilExpiration,
-    });
-
-    if (success) {
-      console.log("\nUploaded secrets to DON...");
-      const encryptedSecretsReference = secretsManager.buildDONHostedEncryptedSecretsReference({
-        slotId,
-        version,
-      });
-
-      console.log(`\nMake a note of the encryptedSecretsReference: ${encryptedSecretsReference} `);
-
-      const source = fs.readFileSync(path.resolve(__dirname, "../sourceNormalise.js")).toString();
-
-      const args = ["layer1"];
-      const gasLimit = 300_000;
-      const requestTx = await IndexCentralisedDataContract.sendRequest(
-        source,
-        Location.DONHosted,
-        encryptedSecretsReference,
-        args,
-        [],
-        subID,
-        gasLimit,
-      );
-
-      const txReceipt = await requestTx.wait();
-      if (txReceipt !== null) {
-        const requestId = txReceipt.logs[0].topics[1];
-        console.log(`\nRequest made.  Request Id is ${requestId}. TxHash is ${requestTx.hash}`);
+      if (categoryID !== undefined) {
+        categoryObject.set(categoryID, []);
       }
+
+      try {
+        const categoryData = await fs.readFileSync(
+          path.resolve(__dirname, `../../../../coingecko/categories/${categoryID}.json`),
+          "utf8",
+        );
+
+        const categoryDataJSON = JSON.parse(categoryData);
+        for (let j = 0; j < categoryDataJSON.length; j++) {
+          const market = categoryDataJSON[j];
+          const symbol = market?.symbol;
+          // const id = market?.id;
+          const priceObject = marketArray.find(m => m.symbol === symbol);
+          if (priceObject !== undefined) {
+            categoryObject.get(categoryID)?.push(priceObject);
+          }
+        }
+      } catch (e) {}
     }
+
+    for (let i = 0; i < categoryArray.length; i++) {
+      console.log(categoryArray[i]?.id, categoryObject.get(categoryArray[i]?.id)?.length);
+    }
+
   }
 };
 
@@ -86,4 +84,4 @@ export default deployYourContract;
 
 // Tags are useful if you have multiple deploy files and only want to run one of them.
 // e.g. yarn deploy --tags YourContract
-deployYourContract.tags = ["IndexCentralisedData"];
+deployYourContract.tags = ["decentralised"];

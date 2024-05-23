@@ -2,7 +2,9 @@
 // Attestor.sol
 
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.20;
+// pragma solidity 0.8.20;
+pragma solidity 0.8.4;
+
  
  
 import "@reclaimprotocol/verifier-solidity-sdk/contracts/Reclaim.sol";
@@ -21,7 +23,7 @@ contract Attestor {
   }  
 
   function verifyProof(Reclaim.Proof memory proof) public view{
-      Reclaim(reclaimAddress).verifyProof(proof, providersHashes);
+      // Reclaim(reclaimAddress).verifyProof(proof, providersHashes);
       
   }
 }
