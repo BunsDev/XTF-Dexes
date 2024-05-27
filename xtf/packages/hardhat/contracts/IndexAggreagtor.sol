@@ -112,10 +112,12 @@ contract IndexAggregator {
             require(token_a_value > token_b_value, "IndexAggregator: order is not correct");
         }
 
-        lastIndexOrder = indexOrders;
-        lastIndexTimestamp = block.timestamp;
         if(keccak256(abi.encodePacked(tag)) != keccak256(abi.encodePacked(""))) {
            tagsIndexOrder[tag] = indexOrders;
+        }
+        else{
+            lastIndexOrder = indexOrders;
+            lastIndexTimestamp = block.timestamp;  
         }
         return true;
     }

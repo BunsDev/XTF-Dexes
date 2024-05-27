@@ -107,7 +107,10 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
                 _address: await simpleERC20.getAddress(),
                 _chainId: sepoliaChainId,
                 _aggregator: await mockAggregator.getAddress(),
+                _tags: [categoryID],
               });
+            } else {
+              tokenInfo.find(token => token._symbol === symbol)?._tags.push(categoryID);
             }
           }
         }
