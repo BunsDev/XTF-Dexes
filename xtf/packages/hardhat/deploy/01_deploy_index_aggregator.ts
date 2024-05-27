@@ -45,7 +45,8 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     // });
 
     const marketArray = Object.values(markets);
-    const categoryArray = Object.values(category).slice(0, 1);
+    const categoryArray = Object.values(category);
+    // .slice(0, 1);
 
     for (let i = 0; i < categoryArray.length; i++) {
       const category = categoryArray[i];
