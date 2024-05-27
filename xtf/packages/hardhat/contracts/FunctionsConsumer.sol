@@ -27,9 +27,11 @@ contract IndexCentralisedData {
   uint256 public s_lastResponseTime;
   AssetData public assetData;
 
-  // constructor(address router, bytes32 _donId) FunctionsClient(router) ConfirmedOwner(msg.sender) {
-  //   donId = _donId;
-  // }
+  constructor(address router, bytes32 _donId) 
+// FunctionsClient(router) ConfirmedOwner(msg.sender) {
+  {
+    donId = _donId;
+  }
 
   /**
    * @notice Set the DON ID

@@ -40,6 +40,7 @@ describe("IndexAggregator", function () {
         _address: await simpleERC20.getAddress(),
         _chainId: chainId,
         _aggregator: await mockAggregator.getAddress(),
+        _tags: [],
       });
     }
 
@@ -102,7 +103,7 @@ describe("IndexAggregator", function () {
       const indexes = Array.from(Array(tokenNumber).keys());
       indexes.sort((a, b) => values[b].sub(values[a]).toNumber());
 
-      await indexAggregator.persistIndex(indexes);
+      await indexAggregator.persistIndex(indexes, []);
     });
   });
 });
