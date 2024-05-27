@@ -8,11 +8,13 @@ struct TokenInfo {
     address _address;
     uint32 _chainId;
     address _aggregator;
+    string[] _tags;
 }
 
 
 contract IndexAggregator {
     TokenInfo[] public tokenInfo;
+    TokenInfo[] tmpTokens;
     mapping(string => uint256) public tokens;
     string[] public tokenSymbols;
     uint256[] public totalSupplies;
@@ -21,7 +23,9 @@ contract IndexAggregator {
     uint256 timeWindow;
     uint256 samplingFrequency;
     uint256 lastSampleTime;
-    uint256[] public lastIndexOrder; 
+    uint256[] public lastIndexOrder;
+    mapping(string => uint256[]) public tagsIndexOrder; 
+    mapping(string => uint256) public tagsIndexTimestamp;
     uint256 public lastIndexTimestamp;
     uint256 public bribeUnit;
 
@@ -67,11 +71,29 @@ contract IndexAggregator {
         }
     }
 
-    function persistIndex(uint256[] memory indexOrders) public returns (bool)
+    function persistIndex(uint256[] memory indexOrders, string memory tag) public returns (bool)
     {
         // indexOrders is an array index order [2,0,1] means 2nd token, 0th token, 1st token for price calculation
+        if(keccak256(abi.encodePacked(tag)) != keccak256(abi.encodePacked(""))) {
+            for (uint256 i = 0; i < tmpTokens.length; i++) {
+                delete tmpTokens[i];
+            }
 
-        require(indexOrders.length == tokenInfo.length, "IndexAggregator: Invalid length of indexOrders");
+            for (uint256 i = 0; i < tokenInfo.length; i++) {
+                for (uint256 j = 0; j < tokenInfo[i]._tags.length; j++) {
+                    if (keccak256(abi.encodePacked(tokenInfo[i]._tags[j])) == keccak256(abi.encodePacked(tag))) {
+                        tmpTokens.push(tokenInfo[i]);
+                    }
+                }
+            }
+            require(
+                tmpTokens.length == indexOrders.length,  "IndexAggregator: Invalid length of token with required tags");
+        }
+        else{
+           require(indexOrders.length == tokenInfo.length, "IndexAggregator: Invalid length of indexOrders");
+        }
+
+
 
         uint256 token_a_value;
         uint256 token_b_value;
@@ -92,6 +114,9 @@ contract IndexAggregator {
 
         lastIndexOrder = indexOrders;
         lastIndexTimestamp = block.timestamp;
+        if(keccak256(abi.encodePacked(tag)) != keccak256(abi.encodePacked(""))) {
+           tagsIndexOrder[tag] = indexOrders;
+        }
         return true;
     }
 }
