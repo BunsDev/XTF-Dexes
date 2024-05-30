@@ -2,7 +2,7 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { IndexCentralisedData } from "../typechain-types";
 import { networks } from "../scripts/networks";
-import { SubscriptionManager, SecretsManager, Location } from "@chainlink/functions-toolkit";
+import { SubscriptionManager, SecretsManager } from "@chainlink/functions-toolkit";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { Wallet } from "@ethersproject/wallet";
 import fs from "fs";
@@ -61,7 +61,10 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
       log: true,
     });
 
-    const IndexCentralisedDataContract = await hre.ethers.getContract<IndexCentralisedData>("IndexCentralisedData", deployer);
+    const IndexCentralisedDataContract = await hre.ethers.getContract<IndexCentralisedData>(
+      "IndexCentralisedData",
+      deployer,
+    );
 
     await subscriptionManager.addConsumer({
       subscriptionId: subID,
@@ -92,23 +95,22 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
       console.log(`\nMake a note of the encryptedSecretsReference: ${encryptedSecretsReference} `);
 
       const source = fs.readFileSync(path.resolve(__dirname, "../sourceNormalise.js")).toString();
-
       const args = ["layer1"];
       const gasLimit = 300_000;
-      const requestTx = await IndexCentralisedDataContract.sendRequest(
-        source,
-        Location.DONHosted,
-        encryptedSecretsReference,
-        args,
-        [],
-        subID,
-        gasLimit,
-      );
+      // const requestTx = await IndexCentralisedDataContract.sendRequest(
+      //   source,
+      //   Location.DONHosted,
+      //   encryptedSecretsReference,
+      //   args,
+      //   [],
+      //   subID,
+      //   gasLimit,
+      // );
 
       const txReceipt = await requestTx.wait();
       if (txReceipt !== null) {
         const requestId = txReceipt.logs[0].topics[1];
-        console.log(`\nRequest made.  Request Id is ${requestId}. TxHash is ${requestTx.hash}`);
+        // console.log(`\nRequest made.  Request Id is ${requestId}. TxHash is ${requestTx.hash}`);
       }
     }
   }
