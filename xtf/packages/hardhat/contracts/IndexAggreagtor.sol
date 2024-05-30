@@ -12,6 +12,26 @@ struct TokenInfo {
     string[] _tags;
 }
 
+struct LiquidityMessage {
+    address token;
+    uint256 liquidity;
+    uint32 chainId;
+    uint256 timestamp;
+} 
+
+struct SupplyMessage {
+    address token;
+    uint256 supply;
+    uint32 chainId;
+    uint256 timestamp;
+}
+
+struct AggregatorParams {
+    uint256 _timeWindow; 
+    uint256 _sampleSize;
+    // uint32 _chainId;
+    uint256 _bribeUnit;
+}
 
 contract IndexAggregator {
     TokenInfo[] public tokenInfo;
@@ -19,7 +39,15 @@ contract IndexAggregator {
     LiquidityManager public liquidityManager;
     mapping(string => uint256) public tokens;
     string[] public tokenSymbols;
+
+    
+    LiquidityMessage[] public liquidityMessages;
+    SupplyMessage[] public supplyMessages;
+
     uint256[] public totalSupplies;
+    uint256[] public liquidities;
+    uint256[] public tokenParamsTimestampUpdates;
+
     mapping(uint256 => uint256[]) public movingAverage;
     uint256 sampleSize;
     uint256 timeWindow;
@@ -30,11 +58,14 @@ contract IndexAggregator {
     mapping(string => uint256) public tagsIndexTimestamp;
     uint256 public lastIndexTimestamp;
     uint256 public bribeUnit;
+    uint32 public chainId;
 
-    constructor(TokenInfo[] memory _tokenInfo, uint256 _timeWindow, uint256 _sampleSize, address _liquidityManager) {
-        sampleSize = _sampleSize;
-        timeWindow = _timeWindow;
+    constructor(TokenInfo[] memory _tokenInfo,  address _liquidityManager, AggregatorParams memory _aggregatorParams
+    ) {
+        sampleSize = _aggregatorParams._sampleSize;
+        timeWindow = _aggregatorParams._timeWindow;
         samplingFrequency = timeWindow / sampleSize;
+        bribeUnit = _aggregatorParams._bribeUnit;
         liquidityManager = LiquidityManager(_liquidityManager);
         for (uint256 i = 0; i < _tokenInfo.length; i++) {
             tokenInfo.push(_tokenInfo[i]);
@@ -44,7 +75,50 @@ contract IndexAggregator {
         }
     }
 
+    function setChainId(uint32 _chainId) external {
+        chainId = _chainId;
+    }
 
+    function updateTokenParams(uint256[] memory _totalSupplies, uint256[] memory _liquidities) external {
+        for (uint256 i = 0; i < totalSupplies.length; i++) {
+            for (uint256 j = 0; j < tokenInfo.length; j++) {
+                if (tokenInfo[j]._address == supplyMessages[i].token) {
+                    totalSupplies[j] = supplyMessages[i].supply;
+                    tokenParamsTimestampUpdates[j] = liquidityMessages[i].timestamp;
+                }
+                continue;
+            }
+        }
+
+        for (uint256 i = 0; i < liquidities.length; i++) {
+            for (uint256 j = 0; j < tokenInfo.length; j++) {
+                if (tokenInfo[j]._address == liquidityMessages[i].token) {
+                    liquidities[j] = liquidityMessages[i].liquidity;
+                    tokenParamsTimestampUpdates[j] = liquidityMessages[i].timestamp;
+                }
+                continue;
+            }
+        }
+
+        for (uint256 i = 0; i < tokenInfo.length; i++) {
+            if (tokenInfo[i]._chainId == chainId) {
+                liquidities[i] = liquidityManager.getTotalLiquidityForToken(tokenInfo[i]._address);
+                totalSupplies[i] = IERC20(tokenInfo[i]._address).totalSupply();
+                tokenParamsTimestampUpdates[i] = block.timestamp;
+            }
+        }
+    }
+
+
+    function checkTokenParams() public {
+        for (uint256 i = 0; i < tokenInfo.length; i++) {
+            if (block.timestamp - tokenParamsTimestampUpdates[i] >= timeWindow) {
+                liquidities[i] = liquidityManager.getTotalLiquidityForToken(tokenInfo[i]._address);
+                totalSupplies[i] = IERC20(tokenInfo[i]._address).totalSupply();
+                tokenParamsTimestampUpdates[i] = block.timestamp;
+            }
+        }
+    }
 
     function collectPriceFeeds() external {
         require(block.timestamp - lastSampleTime >= samplingFrequency, "IndexAggregator: Sampling frequency not reached");
