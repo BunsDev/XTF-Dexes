@@ -10,7 +10,7 @@ describe("Liquidity Manager", function () {
   let token1: SimpleERC20;
   let mockUSDC: SimpleERC20;
   let mockPool: MockUniswapV3Pool;
-  const fixedFeePoint = 25;
+  const feeTier = 500;
   const liquidity = BigNumber.from(1000).toString();
 
   before(async () => {
@@ -30,19 +30,21 @@ describe("Liquidity Manager", function () {
     mockPool = (await mockUniswapV3PoolFactory.deploy(
       await token0.getAddress(),
       await token1.getAddress(),
-      fixedFeePoint,
+      feeTier,
       liquidity,
     )) as MockUniswapV3Pool;
     mockUniswapV3Factory.setPool(
       await token0.getAddress(),
       await mockUSDC.getAddress(),
-      fixedFeePoint,
+      feeTier,
       await mockPool.getAddress(),
     );
   });
 
   describe("Deployment", function () {
     it("Liquidity Manager should get the liquidity from uniswapV3", async function () {
+      const pools = await liquidityManager.getPoolsForToken(await token0.getAddress());
+      console.log("pools", pools);
       const res = await liquidityManager.getTotalLiquidityForToken(await token0.getAddress());
       console.log("res", res.toString());
     });

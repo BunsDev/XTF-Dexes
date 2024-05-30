@@ -25,7 +25,9 @@ contract MockUniswapV3Pool is IUniswapV3Pool {
         _liquidity = l;
     }
 
-	function liquidity() external view override returns (uint128) {}
+	function liquidity() external view override returns (uint128) {
+        return _liquidity;
+    }
 
 	function token0() external view override returns (address) {}
 
