@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import * as meme from "../../../../../coingecko/categories/meme-token.json";
 import * as young from "../../../../../coingecko/categories/young.json";
 import * as category from "../../../../../coingecko/category.json";
-import { Avatar, Card, Col, Divider, List, Row, Skeleton } from "antd";
+import { Avatar, Card, Col, Divider, List, Row, Skeleton, Tag, InputNumber, Select } from "antd";
 import { CategoryScale, Chart, LineElement, LinearScale, LogarithmicScale, PointElement } from "chart.js";
 import type { NextPage } from "next";
 import { Line } from "react-chartjs-2";
@@ -20,6 +20,7 @@ const youngList = Object.values(young);
 
 const Debug: NextPage = () => {
   const [chartData, setChartData] = useState<any>();
+  const [indexLimit, setIndexLimit] = useState(10);
 
   useEffect(() => {
     // last 30 days for labels
@@ -159,6 +160,33 @@ const Debug: NextPage = () => {
           valuable, while others have faded into obscurity.
         </p>
         <br />
+        <div
+          style={{
+            width: "1000px",
+            margin: "auto",
+          }}
+        >
+          <InputNumber
+            style={{
+              width: "100px",
+              marginRight: "20px",
+            }}
+            min={3}
+            max={meme.length}
+            value={indexLimit}
+            onChange={value => setIndexLimit(value as number)}
+          />
+          <Select
+            defaultValue="cap_weighted"
+            style={{
+              width: "120px",
+            }}
+          >
+            <Select.Option value="cap_weighted">Cap Weighted</Select.Option>
+            <Select.Option value="equal_weighted">Equal Weighted</Select.Option>
+          </Select>
+        </div>
+        <br />
         <br />
 
         {meme && (
@@ -176,10 +204,15 @@ const Debug: NextPage = () => {
               // meme is not an array, so we need to convert it to an array
               Object.keys(meme)
                 .map((k: any) => meme[k])
-                .slice(0, 10)
+                .slice(0, indexLimit)
             }
             renderItem={item => (
-              <List.Item actions={[<a key="list-loadmore-edit">edit</a>, <a key="list-loadmore-more">more</a>]}>
+              <List.Item
+                actions={[
+                  <a key="list-loadmore-edit">{"Rank #" + item.market_cap_rank}</a>,
+                  <a key="list-loadmore-more">{"Lqdty: " + Math.random().toFixed(2) + "P"}</a>,
+                ]}
+              >
                 <List.Item.Meta
                   avatar={
                     <Avatar
@@ -190,7 +223,20 @@ const Debug: NextPage = () => {
                       src={item.image}
                     />
                   }
-                  title={<a href="https://ant.design">{item.name}</a>}
+                  title={
+                    <a href="https://ant.design">
+                      {
+                        <>
+                          {item.name}
+                          <Tag
+                            style={{
+                              marginLeft: "10px",
+                            }}
+                          >{"Sepolia"}</Tag>
+                        </>
+                      }
+                    </a>
+                  }
                   description={
                     <span>
                       {youngList.find((y: any) => String(y.symbol).toLowerCase() === item.symbol.toLowerCase())
@@ -206,6 +252,26 @@ const Debug: NextPage = () => {
             )}
           />
         )}
+        {/* central button for launch an XTF Fund */}
+        <div
+          style={{
+            marginTop: "80px",
+          }}
+        >
+          <button
+            style={{
+              padding: "10px 20px",
+              borderRadius: "5px",
+              // backgroundColor: "#1890ff",
+              backgroundColor: "#f56a00",
+              color: "white",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            Launch an XTF Fund
+          </button>
+        </div>
       </div>
     </>
   );
