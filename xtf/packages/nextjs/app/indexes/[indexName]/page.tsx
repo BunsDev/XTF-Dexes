@@ -127,7 +127,7 @@ const Debug: NextPage = ({ params }: { params: { indexName: string } }) => {
           <Select
             defaultValue="cap_weighted"
             style={{
-              width: "120px",
+              width: "150px",
             }}
           >
             <Select.Option value="cap_weighted">Cap Weighted</Select.Option>
