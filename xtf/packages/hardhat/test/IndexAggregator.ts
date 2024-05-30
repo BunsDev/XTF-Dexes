@@ -1,6 +1,12 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { IndexAggregator, SimpleERC20, MockAggregator } from "../typechain-types";
+import {
+  IndexAggregator,
+  SimpleERC20,
+  MockAggregator,
+  MockUniswapV3Factory,
+  LiquidityManager,
+} from "../typechain-types";
 import { BigNumber } from "@ethersproject/bignumber";
 
 describe("IndexAggregator", function () {
@@ -15,12 +21,23 @@ describe("IndexAggregator", function () {
   const tokenNumber = 3;
 
   let indexAggregator: IndexAggregator;
+  let mockUSDC: SimpleERC20;
+  let mockUniswapV3Factory: MockUniswapV3Factory;
+  let liquidityManager: LiquidityManager;
 
   before(async () => {
     const [owner] = await ethers.getSigners();
     const simpleERC20Factory = await ethers.getContractFactory("SimpleERC20");
     const mockAggregatorFactory = await ethers.getContractFactory("MockAggregator");
     const indexAggregatorFactory = await ethers.getContractFactory("IndexAggregator");
+
+    const mockUniswapV3FactoryFactory = await ethers.getContractFactory("MockUniswapV3Factory");
+    const liquidityManagerFactory = await ethers.getContractFactory("LiquidityManager");
+    mockUSDC = (await simpleERC20Factory.deploy("USDC", "USDC", 6)) as SimpleERC20;
+    mockUniswapV3Factory = (await mockUniswapV3FactoryFactory.deploy()) as MockUniswapV3Factory;
+    liquidityManager = (await liquidityManagerFactory.deploy(await mockUniswapV3Factory.getAddress(), [
+      await mockUSDC.getAddress(),
+    ])) as LiquidityManager;
 
     for (let i = 0; i < tokenNumber; i++) {
       const simpleERC20 = (await simpleERC20Factory.deploy("SimpleERC20", "SERC20", 0)) as SimpleERC20;
@@ -44,7 +61,12 @@ describe("IndexAggregator", function () {
       });
     }
 
-    indexAggregator = (await indexAggregatorFactory.deploy(tokenInfo, timeWindow, sampleSize)) as IndexAggregator;
+    indexAggregator = (await indexAggregatorFactory.deploy(
+      tokenInfo,
+      timeWindow,
+      sampleSize,
+      await liquidityManager.getAddress(),
+    )) as IndexAggregator;
   });
 
   describe("Deployment", function () {
@@ -103,7 +125,7 @@ describe("IndexAggregator", function () {
       const indexes = Array.from(Array(tokenNumber).keys());
       indexes.sort((a, b) => values[b].sub(values[a]).toNumber());
 
-      await indexAggregator.persistIndex(indexes, []);
+      await indexAggregator.persistIndex(indexes, "");
     });
   });
 });

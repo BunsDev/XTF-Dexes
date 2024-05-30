@@ -14,7 +14,7 @@ describe("Liquidity Manager", function () {
   const liquidity = BigNumber.from(1000).toString();
 
   before(async () => {
-    const [owner] = await ethers.getSigners();
+    // const [owner] = await ethers.getSigners();
     const mockUniswapV3FactoryFactory = await ethers.getContractFactory("MockUniswapV3Factory");
     const liquidityManagerFactory = await ethers.getContractFactory("LiquidityManager");
     const simpleERC20Factory = await ethers.getContractFactory("SimpleERC20");

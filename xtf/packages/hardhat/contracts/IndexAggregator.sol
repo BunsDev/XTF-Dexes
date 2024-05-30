@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {LiquidityManager} from "./LiquidityManager.sol";
 
 struct TokenInfo {
     string _symbol;
@@ -15,6 +16,7 @@ struct TokenInfo {
 contract IndexAggregator {
     TokenInfo[] public tokenInfo;
     TokenInfo[] tmpTokens;
+    LiquidityManager public liquidityManager;
     mapping(string => uint256) public tokens;
     string[] public tokenSymbols;
     uint256[] public totalSupplies;
@@ -29,10 +31,11 @@ contract IndexAggregator {
     uint256 public lastIndexTimestamp;
     uint256 public bribeUnit;
 
-    constructor(TokenInfo[] memory _tokenInfo, uint256 _timeWindow, uint256 _sampleSize) {
+    constructor(TokenInfo[] memory _tokenInfo, uint256 _timeWindow, uint256 _sampleSize, address _liquidityManager) {
         sampleSize = _sampleSize;
         timeWindow = _timeWindow;
         samplingFrequency = timeWindow / sampleSize;
+        liquidityManager = LiquidityManager(_liquidityManager);
         for (uint256 i = 0; i < _tokenInfo.length; i++) {
             tokenInfo.push(_tokenInfo[i]);
             tokenSymbols.push(_tokenInfo[i]._symbol);
@@ -40,6 +43,8 @@ contract IndexAggregator {
             totalSupplies.push(IERC20(_tokenInfo[i]._address).totalSupply());
         }
     }
+
+
 
     function collectPriceFeeds() external {
         require(block.timestamp - lastSampleTime >= samplingFrequency, "IndexAggregator: Sampling frequency not reached");
