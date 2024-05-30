@@ -7,24 +7,21 @@ import "./IUniswapV3Pool.sol";
 contract LiquidityManager {
     IUniswapV3Factory public factory;
     uint24[] public feeTiers = [500, 3000, 10000]; // Example fee tiers: 0.05%, 0.3%, 1%
-    address[] public wellKnownTokens = [
-        0xC0eA2b88c6c510A5EbdafDE64366527d57C86f18, // USDC
-        0xC0eA2b88c6c510A5EbdafDE64366527d57C86f18, // USDT
-        0xC0eA2b88c6c510A5EbdafDE64366527d57C86f18  // WETH
-    ];
+    address[] public comparisonTokens;
 
-    constructor(address _factory) {
+    constructor(address _factory, address[] memory _comparisonTokens) {
         factory = IUniswapV3Factory(_factory);
+        comparisonTokens = _comparisonTokens;
     }
 
     function getPoolsForToken(address token) public view returns (address[] memory) {
         uint256 poolCount = 0;
-        address[] memory tempPools = new address[](wellKnownTokens.length * feeTiers.length);
+        address[] memory tempPools = new address[](comparisonTokens.length * feeTiers.length);
 
-        for (uint256 i = 0; i < wellKnownTokens.length; i++) {
-            if (wellKnownTokens[i] == token) continue;
+        for (uint256 i = 0; i < comparisonTokens.length; i++) {
+            if (comparisonTokens[i] == token) continue;
             for (uint256 j = 0; j < feeTiers.length; j++) {
-                address pool = factory.getPool(token, wellKnownTokens[i], feeTiers[j]);
+                address pool = factory.getPool(token, comparisonTokens[i], feeTiers[j]);
                 if (pool != address(0)) {
                     tempPools[poolCount] = pool;
                     poolCount++;

@@ -4,7 +4,7 @@ import "./IUniswapV3Factory.sol";
 import "./IUniswapV3Pool.sol";
 
 
-contract MockkUniswapV3Factory is IUniswapV3Factory {
+contract MockUniswapV3Factory is IUniswapV3Factory {
 
     address _owner;
     mapping(address => mapping(address => mapping(uint24 => address))) public _pools;
@@ -19,6 +19,15 @@ contract MockkUniswapV3Factory is IUniswapV3Factory {
 		uint24 fee
 	) external view override returns (address) {
 		return _pools[tokenA][tokenB][fee];
+	}
+
+	function setPool(
+		address tokenA,
+		address tokenB,
+		uint24 fee,
+		address pool
+	) external {
+		_pools[tokenA][tokenB][fee] = pool;
 	}
 
 	function owner() external view override returns (address) {
