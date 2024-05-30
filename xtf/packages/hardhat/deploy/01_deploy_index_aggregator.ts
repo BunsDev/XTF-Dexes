@@ -1,6 +1,6 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
-import { IndexCentralisedData } from "../typechain-types";
+import { IndexCentralisedData, MockUniswapV3Factory } from "../typechain-types";
 import { networks } from "../scripts/networks";
 import { SubscriptionManager, SecretsManager, Location } from "@chainlink/functions-toolkit";
 import { JsonRpcProvider } from "@ethersproject/providers";
@@ -10,6 +10,8 @@ import * as category from "../../../../coingecko/category.json";
 import fs from "fs";
 import path from "path";
 import { BigNumber } from "@ethersproject/bignumber";
+import { Mock } from "node:test";
+const feeTier = 500;
 
 const categoryObject = new Map<string, any[]>();
 
@@ -31,18 +33,24 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     const network = networks["ethereumSepolia"];
     const sepoliaChainId = 11155111;
 
-    // await deploy("MockAggregator", {
-    //   from: deployer,
-    //   args: [100, 8],
-    //   log: true,
-    // });
+    await deploy("MockUSDC", {
+      from: deployer,
+      args: ["USDC", "USDC", 6],
+      log: true,
+    });
+    await deploy("MockUniswapV3Factory", {
+      from: deployer,
+      log: true,
+    });
+    const mockUSDC = await hre.ethers.getContract("MockUSDC");
+    const mockUniswapV3Factory = (await hre.ethers.getContract("MockUniswapV3Factory")) as MockUniswapV3Factorya;
 
-    // tokenInfo.push({
-    //   _symbol: await simpleERC20.symbol(),
-    //   _address: await simpleERC20.getAddress(),
-    //   _chainId: chainId,
-    //   _aggregator: await mockAggregator.getAddress(),
-    // });
+    await deploy("LiquidityManager", {
+      from: deployer,
+      args: [await mockUniswapV3Factory.getAddress(), [await mockUSDC.getAddress()]],
+      log: true,
+    });
+    const liquidityManager = await hre.ethers.getContract("LiquidityManager");
 
     const marketArray = Object.values(markets);
     const categoryArray = Object.values(category);
@@ -83,6 +91,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
               tokenDetails.set(symbol, priceObject);
               console.log(symbol, priceObject.current_price, priceObject.circulating_supply, priceObject.name);
+
               await deploy("SimpleERC20", {
                 from: deployer,
                 args: [priceObject.name, priceObject.symbol, circulatingSupply],
@@ -101,6 +110,30 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
               const simpleERC20 = await hre.ethers.getContract("SimpleERC20");
               const mockAggregator = await hre.ethers.getContract("MockAggregator");
+
+              const minLiquidity = priceObject.total_volume * 0.05;
+              const maxLiquidity = priceObject.total_volume * 0.5;
+              let liquidity = Math.floor(Math.random() * (maxLiquidity - minLiquidity + 1) + minLiquidity);
+
+              await deploy("MockUniswapV3Pool", {
+                from: deployer,
+                args: [
+                  await simpleERC20.getAddress(),
+                  await mockUSDC.getAddress(),
+                  feeTier,
+                  BigNumber.from(liquidity).toString(),
+                ],
+                log: true,
+              });
+
+              const pool = await hre.ethers.getContract("MockUniswapV3Pool");
+
+              mockUniswapV3Factory.setPool(
+                await simpleERC20.getAddress(),
+                await mockUSDC.getAddress(),
+                feeTier,
+                await pool.getAddress(),
+              );
 
               tokenInfo.push({
                 _symbol: priceObject.symbol,
@@ -121,7 +154,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
     await deploy("IndexAggregator", {
       from: deployer,
-      args: [tokenInfo, 60, 5],
+      args: [tokenInfo, 60, 5, await liquidityManager.getAddress()],
       log: true,
     });
 
