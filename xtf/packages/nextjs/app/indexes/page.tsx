@@ -7,12 +7,6 @@ import * as category from "../../../../../coingecko/category.json";
 import { Avatar, Card, Col, Divider, InputNumber, List, Row, Select, Skeleton, Tag } from "antd";
 import type { NextPage } from "next";
 
-Chart.register(CategoryScale);
-Chart.register(LinearScale);
-Chart.register(LogarithmicScale);
-Chart.register(PointElement);
-Chart.register(LineElement);
-
 const { Group } = Avatar;
 const youngList = Object.values(young);
 
@@ -37,7 +31,16 @@ const Debug: NextPage = () => {
             .map(c => (
               <Col span={8} key={c.name}>
                 <Card
-                  title={c.name}
+                  title={
+                    <a
+                      // remove also ( )
+                      href={`/indexes/${c.name.toLowerCase().replace(/\(|\)/g, "").replace(/\s/g, "-")}`}
+                      // target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {c.name}
+                    </a>
+                  }
                   bordered={false}
                   style={{
                     height: "200px",

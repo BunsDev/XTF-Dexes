@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import * as meme from "../../../../../../coingecko/categories/meme-token.json";
 import * as young from "../../../../../../coingecko/categories/young.json";
-import * as category from "../../../../../../coingecko/category.json";
-import { Avatar, Card, Col, Divider, InputNumber, List, Row, Select, Skeleton, Tag } from "antd";
+import { Avatar, InputNumber, List, Select, Tag } from "antd";
 import { CategoryScale, Chart, LineElement, LinearScale, LogarithmicScale, PointElement } from "chart.js";
 import type { NextPage } from "next";
 import { Line } from "react-chartjs-2";
@@ -21,9 +19,18 @@ const youngList = Object.values(young);
 const Debug: NextPage = ({ params }: { params: { indexName: string } }) => {
   const [chartData, setChartData] = useState<any>();
   const [indexLimit, setIndexLimit] = useState(10);
+  const [indexData, setIndexData] = useState<any>([]);
 
   useEffect(() => {
     // last 30 days for labels
+    fetch(`/categories/${params.indexName}.json`)
+      .then(response => response.json())
+      .then(data => setIndexData(data))
+      .catch(error => console.error("Error fetching data:", error));
+    console.log("indexData", indexData);
+  }, []);
+
+  useEffect(() => {
     const today = new Date();
     const labels = Array.from({ length: 30 }, (_, i) => {
       const date = new Date(today);
@@ -31,10 +38,14 @@ const Debug: NextPage = ({ params }: { params: { indexName: string } }) => {
       return date.toLocaleDateString();
     });
 
-    // get the first 30 prices
-    const data = meme.map((m: any) => m.current_price).slice(0, 30);
-
-    // console.log('symbol', youngList.find((y: any) => String(y.symbol).toLowerCase() === "btc")?.descriptions?.en);
+    const data = indexData ? indexData.map((m: any) => m.current_price).slice(0, 30) : [];
+    if (data.length < 30) {
+      // push the same values from the start day by day
+      let j = 0;
+      for (let i = data.length; i < 30; i++) {
+        data.push(data[j++]);
+      }
+    }
 
     setChartData({
       labels,
@@ -48,7 +59,7 @@ const Debug: NextPage = ({ params }: { params: { indexName: string } }) => {
         },
       ],
     });
-  }, []);
+  }, [indexData]);
 
   return (
     <>
@@ -120,7 +131,7 @@ const Debug: NextPage = ({ params }: { params: { indexName: string } }) => {
               marginRight: "20px",
             }}
             min={3}
-            max={meme.length}
+            max={indexData.length}
             value={indexLimit}
             onChange={value => setIndexLimit(value as number)}
           />
@@ -137,7 +148,7 @@ const Debug: NextPage = ({ params }: { params: { indexName: string } }) => {
         <br />
         <br />
 
-        {meme && (
+        {indexData && (
           <List
             // className="demo-loadmore-list"
             itemLayout="horizontal"
@@ -150,8 +161,8 @@ const Debug: NextPage = ({ params }: { params: { indexName: string } }) => {
             }}
             dataSource={
               // meme is not an array, so we need to convert it to an array
-              Object.keys(meme)
-                .map((k: any) => meme[k])
+              Object.keys(indexData)
+                .map((k: any) => indexData[k])
                 .slice(0, indexLimit)
             }
             renderItem={item => (
@@ -221,6 +232,7 @@ const Debug: NextPage = ({ params }: { params: { indexName: string } }) => {
           >
             Launch an XTF Fund
           </button>
+          <br />
         </div>
       </div>
     </>
