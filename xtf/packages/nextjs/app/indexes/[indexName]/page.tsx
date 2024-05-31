@@ -5,9 +5,9 @@ import * as young from "../../../../../../coingecko/categories/young.json";
 import * as category from "../../../../../../coingecko/category.json";
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import { Avatar, InputNumber, List, Popover, Select, Tag, Watermark } from "antd";
-import { CategoryScale, Chart, LineElement, LinearScale, LogarithmicScale, PointElement } from "chart.js";
+import { ArcElement, CategoryScale, Chart, LineElement, LinearScale, LogarithmicScale, PointElement } from "chart.js";
 import type { NextPage } from "next";
-import { Line } from "react-chartjs-2";
+import { Line, Pie } from "react-chartjs-2";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 
 Chart.register(CategoryScale);
@@ -15,15 +15,34 @@ Chart.register(LinearScale);
 Chart.register(LogarithmicScale);
 Chart.register(PointElement);
 Chart.register(LineElement);
+Chart.register(ArcElement);
 
 const { Group } = Avatar;
 const youngList = Object.values(young);
 const categoryList = Object.values(category);
 
+const colors = [
+  "rgb(255, 99, 132)",
+  "rgb(54, 162, 235)",
+  "rgb(255, 205, 86)",
+  "rgb(75, 192, 192)",
+  "rgb(153, 102, 255)",
+  "rgb(255, 159, 64)",
+  "rgb(255, 159, 64)",
+  "rgb(255, 99, 132)",
+  "rgb(54, 162, 235)",
+  "rgb(255, 205, 86)",
+  "rgb(75, 192, 192)",
+];
+
 const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
   const [chartData, setChartData] = useState<any>();
   const [indexLimit, setIndexLimit] = useState(10);
   const [indexData, setIndexData] = useState<any>([]);
+  const [equalWeighted, setEqualWeighted] = useState(false);
+
+  const [etehreumTimeStamp, setEthereumTimeStamp] = useState<any>(new Date().toLocaleDateString());
+  const [binanceTimeStamp, setBinanceTimeStamp] = useState<any>(new Date().toLocaleDateString());
 
   const { targetNetwork } = useTargetNetwork();
 
@@ -181,32 +200,20 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
           {categoryList.find((c: any) => c.id === params.indexName)?.content}
         </p>
         <br />
-        <div
+        <br />
+
+        <button
           style={{
-            width: "1000px",
-            margin: "auto",
+            padding: "10px 20px",
+            borderRadius: "5px",
+            backgroundColor: "#1890ff",
+            color: "white",
+            border: "none",
+            cursor: "pointer",
           }}
         >
-          <InputNumber
-            style={{
-              width: "100px",
-              marginRight: "20px",
-            }}
-            min={3}
-            max={indexData.length}
-            value={indexLimit}
-            onChange={value => setIndexLimit(value as number)}
-          />
-          <Select
-            defaultValue="cap_weighted"
-            style={{
-              width: "150px",
-            }}
-          >
-            <Select.Option value="cap_weighted">Cap Weighted</Select.Option>
-            <Select.Option value="equal_weighted">Equal Weighted</Select.Option>
-          </Select>
-        </div>
+          Update MarketCap and Liquidity
+        </button>
         <br />
         <br />
 
@@ -304,11 +311,116 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
           />
         )}
         {/* central button for launch an XTF Fund */}
+        <br />
         <div
           style={{
+            border: "3px solid #ccc",
+            // center the text
+            margin: "auto",
+            width: "1000px",
+            padding: "20px",
+            backgroundColor: "#F4F8FF",
             marginTop: "80px",
           }}
         >
+          <br />
+
+          <div
+            style={{
+              width: "300px",
+              margin: "auto",
+            }}
+          >
+            <h1
+              style={{
+                fontSize: "24px",
+                width: "100%",
+              }}
+            >
+              XTF Fund Allocation
+            </h1>
+            <br />
+            <div
+              style={{
+                // width: "500px",
+                margin: "auto",
+                display: "flex",
+              }}
+            >
+              <InputNumber
+                style={{
+                  width: "100px",
+                  marginRight: "20px",
+                }}
+                label="Index Limit"
+                min={3}
+                max={indexData.length}
+                value={indexLimit}
+                onChange={(value: any) => setIndexLimit(value as number)}
+              />
+              <InputNumber
+                style={{
+                  width: "200px",
+                  marginRight: "20px",
+                }}
+                formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                min={100}
+                defaultValue={1000}
+                max={10000}
+              />
+              <Select
+                defaultValue="cap_weighted"
+                style={{
+                  width: "150px",
+                }}
+                onChange={(value: any) => {
+                  if (value === "equal_weighted") {
+                    setEqualWeighted(true);
+                  } else {
+                    setEqualWeighted(false);
+                  }
+                }}
+              >
+                <Select.Option value="cap_weighted">Cap Weighted</Select.Option>
+                <Select.Option value="equal_weighted">Equal Weighted</Select.Option>
+              </Select>
+            </div>
+            <br />
+            <Pie
+              data={{
+                labels: indexData.map((m: any) => m.market_cap).slice(0, indexLimit),
+                datasets: [
+                  {
+                    label: "My First Dataset",
+                    borderWidth: 2,
+                    data: equalWeighted
+                      ? Array(indexLimit).fill(1)
+                      : indexData.map((m: any) => m.market_cap).slice(0, indexLimit),
+                    backgroundColor: colors,
+                    // hoverOffset: 4,
+                  },
+                ],
+              }}
+            ></Pie>
+          </div>
+          <br />
+          {/* print a custom legen made by small square of the color and name of asset next to it */}
+          {indexData.slice(0, indexLimit).map((m: any, i: number) => (
+            <Group key={i} style={{ display: "inline-block", margin: "10px" }}>
+              <Avatar
+                style={{
+                  backgroundColor: colors[i],
+                  width: "20px",
+                  height: "20px",
+                  marginRight: "10px",
+                }}
+              ></Avatar>
+              <span>{m.name}</span>
+            </Group>
+          ))}
+          <br />
+          <br />
+
           <button
             style={{
               padding: "10px 20px",
@@ -320,7 +432,7 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
               cursor: "pointer",
             }}
           >
-            Launch an XTF Fund
+            Create Fund
           </button>
           <br />
         </div>
