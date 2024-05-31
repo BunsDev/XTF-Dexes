@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from "react";
 import * as young from "../../../../../../coingecko/categories/young.json";
-import { Avatar, InputNumber, List, Select, Tag } from "antd";
+import * as category from "../../../../../../coingecko/category.json";
+import { CheckCircleTwoTone } from "@ant-design/icons";
+import { Avatar, InputNumber, List, Popover, Select, Tag, Watermark } from "antd";
 import { CategoryScale, Chart, LineElement, LinearScale, LogarithmicScale, PointElement } from "chart.js";
 import type { NextPage } from "next";
 import { Line } from "react-chartjs-2";
+import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 
 Chart.register(CategoryScale);
 Chart.register(LinearScale);
@@ -15,11 +18,14 @@ Chart.register(LineElement);
 
 const { Group } = Avatar;
 const youngList = Object.values(young);
+const categoryList = Object.values(category);
 
 const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
   const [chartData, setChartData] = useState<any>();
   const [indexLimit, setIndexLimit] = useState(10);
   const [indexData, setIndexData] = useState<any>([]);
+
+  const { targetNetwork } = useTargetNetwork();
 
   useEffect(() => {
     // last 30 days for labels
@@ -61,8 +67,37 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
     });
   }, [indexData]);
 
+  const isOnDiffChain = (symbol: string) => {
+    const currentChain = targetNetwork.name === "Sepolia" ? "ETHEREUM" : targetNetwork.name;
+    if (currentChain === "ETHEREUM") {
+      return (
+        youngList.find((y: any) => String(y.symbol).toLowerCase() === symbol.toLowerCase())?.networks?.[0].Name !==
+        "ETHEREUM"
+      );
+    }
+    return (
+      youngList.find((y: any) => String(y.symbol).toLowerCase() === symbol.toLowerCase())?.networks?.[0].Name ===
+      "ETHEREUM"
+    );
+  };
+
   return (
-    <>
+    <Watermark
+      zIndex={-9}
+      style={
+        // take the whole screen in the behind all the elements
+        {
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          minHeight: "100%",
+        }
+      }
+      content={targetNetwork.name}
+      height={230}
+      width={250}
+    >
       <div className="text-center mt-8 p-10">
         <div
           style={{
@@ -97,12 +132,38 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
         <br />
         <h1
           style={{
-            fontSize: "2rem",
-            marginBottom: "1rem",
+            fontSize: "3rem",
           }}
         >
           {params.indexName}
         </h1>
+        <h2
+          style={{
+            fontSize: "1.3rem",
+            marginBottom: "1rem",
+          }}
+        >
+          {params.indexName + " "}
+          <Popover
+            content={
+              <>
+                <p>
+                  Tags verfiied on <a href="https://www.reclaimprotocol.org/">coingecko.com</a>
+                </p>
+                <p>using reclaim protocol</p>
+              </>
+            }
+            title={
+              <>
+                <p>
+                  <span>TLS Verfied</span> <CheckCircleTwoTone twoToneColor="#52c41a" />
+                </p>
+              </>
+            }
+          >
+            <CheckCircleTwoTone twoToneColor="#52c41a" />
+          </Popover>
+        </h2>
         <br />
 
         <p
@@ -110,13 +171,14 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
             width: "1000px",
             // border: "1px solid #ccc",
             // text justifies the text
-            textAlign: "justify",
+            // center the text
             margin: "auto",
           }}
         >
-          Meme coins are coins that are created as a joke or meme. They are often created to make fun of the
+          {/* Meme coins are coins that are created as a joke or meme. They are often created to make fun of the
           cryptocurrency industry or to make a quick buck. Some meme coins have gained popularity and have become
-          valuable, while others have faded into obscurity.
+          valuable, while others have faded into obscurity. */}
+          {categoryList.find((c: any) => c.id === params.indexName)?.content}
         </p>
         <br />
         <div
@@ -156,7 +218,7 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
             style={{
               marginTop: "80px",
               minHeight: "400px",
-              width: "800px",
+              width: "900px",
               margin: "auto",
             }}
             dataSource={
@@ -183,20 +245,47 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
                     />
                   }
                   title={
-                    <a href="">
+                    <>
                       {
                         <>
-                          {item.name}
-                          <Tag
-                            style={{
-                              marginLeft: "10px",
-                            }}
+                          <Popover
+                            // set the cursor to pointer
+
+                            content={
+                              isOnDiffChain(item.symbol) ? (
+                                <p>
+                                  Click to switch to{" "}
+                                  {
+                                    youngList.find(
+                                      (y: any) => String(y.symbol).toLowerCase() === item.symbol.toLowerCase(),
+                                    )?.networks?.[0].Name
+                                  }
+                                </p>
+                              ) : (
+                                ""
+                              )
+                            }
                           >
-                            {youngList.find((y: any) => String(y.symbol).toLowerCase() === item.symbol.toLowerCase())?.networks?.[0].Name}
-                          </Tag>
+                            {item.name}
+                            <Tag
+                              style={{
+                                cursor: "pointer",
+                                marginLeft: "10px",
+                                color: isOnDiffChain(item.symbol) ? "blue" : "green",
+                              }}
+                              onClick={() => {
+                                console.log("clicked");
+                              }}
+                            >
+                              {
+                                youngList.find((y: any) => String(y.symbol).toLowerCase() === item.symbol.toLowerCase())
+                                  ?.networks?.[0].Name
+                              }
+                            </Tag>
+                          </Popover>
                         </>
                       }
-                    </a>
+                    </>
                   }
                   description={
                     <span>
@@ -235,7 +324,7 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
           <br />
         </div>
       </div>
-    </>
+    </Watermark>
   );
 };
 

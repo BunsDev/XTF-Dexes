@@ -4753,12 +4753,12 @@
     "symbol": "BNB",
     "networks": [
       {
-        "Name": "Binance Chain",
+        "Name": "BINANCE SMART CHAIN",
         "networkType": "Finance"
       }
     ],
     "descriptions": {
-      "en": "BNB is the native cryptocurrency of the Binance Chain."
+      "en": "BNB is the native cryptocurrency of the BINANCE SMART CHAIN."
     }
   },
   {
@@ -5143,7 +5143,7 @@
     "symbol": "RBN",
     "networks": [
       {
-        "Name": "Ethereum",
+        "Name": "ETHEREUM",
         "networkType": "ERC-20"
       }
     ],
@@ -5279,6 +5279,32 @@
     ],
     "descriptions": {
       "en": "Marinade Staked SOL (mSOL) is a liquid staking token on Solana."
+    }
+  },
+  {
+    "name": "PancakeSwap",
+    "symbol": "CAKE",
+    "networks": [
+      {
+        "Name": "BINANCE SMART CHAIN",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "PancakeSwap (CAKE) is a decentralized exchange on Binance Smart Chain."
+    }
+  },
+  {
+    "name": "0x Protocol",
+    "symbol": "ZRX",
+    "networks": [
+      {
+        "Name": "ETHEREUM",
+        "networkType": "ERC-20"
+      }
+    ],
+    "descriptions": {
+      "en": "0x Protocol (ZRX) is a decentralized exchange protocol on Ethereum."
     }
   }
 ]

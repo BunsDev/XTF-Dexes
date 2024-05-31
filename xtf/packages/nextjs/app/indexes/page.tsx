@@ -6,6 +6,7 @@ import * as category from "../../../../../coingecko/category.json";
 import * as market from "../../../../../coingecko/market.json";
 import { Avatar, Card, Col, Divider, InputNumber, List, Row, Select, Skeleton, Tag } from "antd";
 import type { NextPage } from "next";
+import { Watermark } from "antd";
 
 const { Group } = Avatar;
 const youngList = Object.values(young);
@@ -37,7 +38,8 @@ const Debug: NextPage = () => {
                   title={
                     <a
                       // remove also ( )
-                      href={`/indexes/${c.name.toLowerCase().replace(/\(|\)/g, "").replace(/\s/g, "-")}`}
+                      // href={`/indexes/${c.name.toLowerCase().replace(/\(|\)/g, "").replace(/\s/g, "-")}`}
+                      href={`/indexes/${c.id}`}
                       // target="_blank"
                       rel="noopener noreferrer"
                     >
