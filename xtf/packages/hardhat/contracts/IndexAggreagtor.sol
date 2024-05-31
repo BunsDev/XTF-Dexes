@@ -2,7 +2,19 @@
 pragma solidity ^0.8.0;
 import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {Client} from "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.sol";
+import {IRouterClient} from "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IRouterClient.sol";
+import {CCIPReceiver} from "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol";
 import {LiquidityManager} from "./LiquidityManager.sol";
+
+uint32 constant CALLBACK_GAS_LIMIT = 4_000_000;
+
+struct ChainLinkData {
+    address router;
+    address link;
+    uint64 currentChainSelectorId;
+    bytes32 keyHash;
+}
 
 struct TokenInfo {
     string _symbol;
@@ -29,11 +41,24 @@ struct SupplyMessage {
 struct AggregatorParams {
     uint256 _timeWindow; 
     uint256 _sampleSize;
-    // uint32 _chainId;
+    // uint32 _chainId;3
     uint256 _bribeUnit;
 }
 
-contract IndexAggregator {
+struct IndexUpdateMessage {
+    LiquidityMessage[] liquidityMessages;
+    SupplyMessage[] supplyMessages;
+}
+
+enum PayFeesIn {
+    Native,
+    LINK
+}
+
+error NotEnoughBalance(uint256 currentBalance, uint256 calculatedFees);
+
+
+contract IndexAggregator is CCIPReceiver {
     TokenInfo[] public tokenInfo;
     TokenInfo[] tmpTokens;
     LiquidityManager public liquidityManager;
@@ -59,9 +84,15 @@ contract IndexAggregator {
     uint256 public lastIndexTimestamp;
     uint256 public bribeUnit;
     uint32 public chainId;
+    uint32 public mainChainId;
 
-    constructor(TokenInfo[] memory _tokenInfo,  address _liquidityManager, AggregatorParams memory _aggregatorParams
-    ) {
+    ChainLinkData public chainLinkData;
+
+    mapping(uint64 => address) public chainSelectorIdToSidechainAddress;
+
+
+    constructor(TokenInfo[] memory _tokenInfo,  address _liquidityManager, address  router, AggregatorParams memory _aggregatorParams
+    ) CCIPReceiver(router) {
         sampleSize = _aggregatorParams._sampleSize;
         timeWindow = _aggregatorParams._timeWindow;
         samplingFrequency = timeWindow / sampleSize;
@@ -75,36 +106,76 @@ contract IndexAggregator {
         }
     }
 
-    function setChainId(uint32 _chainId) external {
+    function setChainLinkData(
+        address _router,
+        address _link,
+        uint64 _currentChainSelectorId,
+        bytes32 _keyHash
+    ) external {
+        chainLinkData = ChainLinkData({
+            router: _router,
+            link: _link,
+            currentChainSelectorId: _currentChainSelectorId,
+            keyHash: _keyHash
+        });
+    }
+
+    function setChainId(uint32 _chainId, uint32 _mainChainId) external {
         chainId = _chainId;
+        mainChainId = _mainChainId;
+    }
+
+    function isMainChain() public view returns (bool) {
+        return chainId == mainChainId;
+    }
+
+    function setSideChainAddress(
+        uint64 chainSelectorId,
+        address sideChainAddress
+    ) external {
+        chainSelectorIdToSidechainAddress[chainSelectorId] = sideChainAddress;
     }
 
     function updateTokenParams(uint256[] memory _totalSupplies, uint256[] memory _liquidities) external {
-        for (uint256 i = 0; i < totalSupplies.length; i++) {
-            for (uint256 j = 0; j < tokenInfo.length; j++) {
-                if (tokenInfo[j]._address == supplyMessages[i].token) {
-                    totalSupplies[j] = supplyMessages[i].supply;
-                    tokenParamsTimestampUpdates[j] = liquidityMessages[i].timestamp;
-                }
-                continue;
-            }
-        }
-
-        for (uint256 i = 0; i < liquidities.length; i++) {
-            for (uint256 j = 0; j < tokenInfo.length; j++) {
-                if (tokenInfo[j]._address == liquidityMessages[i].token) {
-                    liquidities[j] = liquidityMessages[i].liquidity;
-                    tokenParamsTimestampUpdates[j] = liquidityMessages[i].timestamp;
-                }
-                continue;
-            }
-        }
 
         for (uint256 i = 0; i < tokenInfo.length; i++) {
             if (tokenInfo[i]._chainId == chainId) {
                 liquidities[i] = liquidityManager.getTotalLiquidityForToken(tokenInfo[i]._address);
                 totalSupplies[i] = IERC20(tokenInfo[i]._address).totalSupply();
                 tokenParamsTimestampUpdates[i] = block.timestamp;
+            }
+        }
+
+        if(isMainChain()){
+            for (uint256 i = 0; i < totalSupplies.length; i++) {
+                for (uint256 j = 0; j < tokenInfo.length; j++) {
+                    if (tokenInfo[j]._address == supplyMessages[i].token) {
+                        totalSupplies[j] = supplyMessages[i].supply;
+                        tokenParamsTimestampUpdates[j] = liquidityMessages[i].timestamp;
+                    }
+                    continue;
+                }
+            }
+
+            for (uint256 i = 0; i < liquidities.length; i++) {
+                for (uint256 j = 0; j < tokenInfo.length; j++) {
+                    if (tokenInfo[j]._address == liquidityMessages[i].token) {
+                        liquidities[j] = liquidityMessages[i].liquidity;
+                        tokenParamsTimestampUpdates[j] = liquidityMessages[i].timestamp;
+                    }
+                    continue;
+                }
+            }
+        }
+
+        if(!isMainChain()){
+            SupplyMessage[] memory _supplyMessages = new SupplyMessage[](tokenInfo.length);
+            LiquidityMessage[] memory _liquidityMessages = new LiquidityMessage[](tokenInfo.length);
+            for (uint256 i = 0; i < tokenInfo.length; i++) {
+                if(chainId == tokenInfo[i]._chainId){
+                    _supplyMessages[i] = SupplyMessage(tokenInfo[i]._address, _totalSupplies[i], chainId, block.timestamp);
+                    _liquidityMessages[i] = LiquidityMessage(tokenInfo[i]._address, _liquidities[i], chainId, block.timestamp);
+                }
             }
         }
     }
@@ -117,6 +188,25 @@ contract IndexAggregator {
                 totalSupplies[i] = IERC20(tokenInfo[i]._address).totalSupply();
                 tokenParamsTimestampUpdates[i] = block.timestamp;
             }
+        }
+    }
+
+
+    function _ccipReceive(
+        Client.Any2EVMMessage memory message
+    ) internal virtual override {
+
+        IndexUpdateMessage memory indexMessage = abi.decode(
+            message.data,
+            (IndexUpdateMessage)
+        );
+        for (uint256 i = 0; i < indexMessage.liquidityMessages.length; i++) {
+            LiquidityMessage memory liquidityMessage = indexMessage.liquidityMessages[i];
+            liquidityMessages.push(liquidityMessage);
+        }
+        for (uint256 i = 0; i < indexMessage.supplyMessages.length; i++) {
+            SupplyMessage memory supplyMessage = indexMessage.supplyMessages[i];
+            supplyMessages.push(supplyMessage);
         }
     }
 
@@ -199,5 +289,63 @@ contract IndexAggregator {
             lastIndexTimestamp = block.timestamp;  
         }
         return true;
+    }
+
+
+    function supportsInterface(
+        bytes4 interfaceId
+    )
+        public
+        pure
+        override(CCIPReceiver)
+        returns (bool)
+    {
+        return CCIPReceiver.supportsInterface(interfaceId);
+    }
+
+    function send(
+        uint64 destinationChainSelector,
+        PayFeesIn payFeesIn,
+        IndexUpdateMessage memory data
+    ) internal returns (bytes32 messageId) {
+        Client.EVM2AnyMessage memory message = Client.EVM2AnyMessage({
+            receiver: abi.encode(
+                chainSelectorIdToSidechainAddress[destinationChainSelector]
+            ),
+            data: abi.encode(data),
+            tokenAmounts: new Client.EVMTokenAmount[](0),
+            extraArgs: Client._argsToBytes(
+                Client.EVMExtraArgsV1({
+                    gasLimit: CALLBACK_GAS_LIMIT
+                })
+            ),
+            feeToken: payFeesIn == PayFeesIn.LINK
+                ? chainLinkData.link
+                : address(0)
+        });
+
+        uint256 fee = IRouterClient(chainLinkData.router).getFee(
+            destinationChainSelector,
+            message
+        );
+
+        if (payFeesIn == PayFeesIn.LINK) {
+            if (fee > IERC20(chainLinkData.link).balanceOf(address(this)))
+                revert NotEnoughBalance(
+                    IERC20(chainLinkData.link).balanceOf(address(this)),
+                    fee
+                );
+            IERC20(chainLinkData.link).approve(chainLinkData.router, fee);
+            messageId = IRouterClient(chainLinkData.router).ccipSend(
+                destinationChainSelector,
+                message
+            );
+        } else {
+            if (fee > address(this).balance)
+                revert NotEnoughBalance(address(this).balance, fee);
+            messageId = IRouterClient(chainLinkData.router).ccipSend{
+                value: fee
+            }(destinationChainSelector, message);
+        }
     }
 }
