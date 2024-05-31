@@ -2526,7 +2526,7 @@
   },
   {
     "name": "Lido DAO",
-    "symbol": "LDO",
+    "symbol": "steth",
     "decimalPrecision": 8,
     "price": 1.989,
     "priority": 0,
@@ -2915,19 +2915,6 @@
       "CreationDate": "2021-11-03T12:37:45.033Z"
     },
     "networks": [
-      {
-        "NetworkId": 3,
-        "Name": "ETHEREUM",
-        "ExplorerUrl": "https://etherscan.io/tx/",
-        "ConfirmationCount": 35,
-        "IsDepositEnabled": true,
-        "IsWithdrawalEnabled": true,
-        "FeePercentage": 0.0,
-        "FeeFixed": 21.0837023,
-        "Regex": "^0x[a-fA-F0-9]{40}$",
-        "MemoRegex": null,
-        "Enabled": true
-      },
       {
         "NetworkId": 7,
         "Name": "POLYGON",
@@ -4759,6 +4746,539 @@
       "en": "Young (YNG) is a utility token based on Ethereum's ERC-20 standard. Its reference ecosystem is Young Platform, the leading European exchange. There, you can buy cryptocurrencies  and access a wide range of educational content on the crypto sector. YNG was released to the market in 2022, but since 2018 it has been distributed to users of Step, Young Platform's app based on a play-to-earn mechanism. The main purpose of the YNG token prior to its market launch was to provide rewards and discounts, subsequently YNG has established itself as the token that brings the crypto community closer to the entire platform by providing benefits and bonuses through Clubs. ",
       "fr": "Young (YNG) est un utility token (jeton utilitaire) basé sur la norme ERC-20 d'Ethereum. Son écosystème de référence est Young Platform, l’exchange européen sur lequel on peut acheter des cryptomonnaies et accéder à un large éventail de contenus éducatifs sur le secteur des cryptomonnaies. YNG sera mis sur le marché à l'été 2022, mais depuis 2018, il est distribué aux utilisateurs de Step, l'appli de Young Platform basée sur un mécanisme de play-to-earn. Le principal objectif du token YNG avant la sortie sur le marché était de fournir des rewards et des réductions, mais sa mission est de devenir le jeton qui rapproche la communauté crypto de l'ensemble de la plateforme en fournissant des avantages et des bonus à travers les Clubs. ",
       "it": "Young (YNG) è un utility token basato sullo standard ERC-20 di Ethereum. Il suo ecosistema di riferimento è Young Platform, il primo exchange 100% italiano su cui acquistare criptovalute e accedere a un’ampia gamma di contenuti formativi sul settore crypto. YNG è stato rilasciato nel mercato nel 2022 ma fin dal 2018 è stato distribuito agli utenti di Step, l’app di Young Platform basata su un meccanismo play-to-earn. Lo scopo principale del token YNG prima del suo ingresso nel mercato è stato quello di fornire ricompense e sconti, successivamente YNG si è confermato come il token che avvicina la community crypto all’intera piattaforma garantendo vantaggi e bonus attraverso i Club. "
+    }
+  },
+  {
+    "name": "BNB",
+    "symbol": "BNB",
+    "networks": [
+      {
+        "Name": "Binance Chain",
+        "networkType": "Finance"
+      }
+    ],
+    "descriptions": {
+      "en": "BNB is the native cryptocurrency of the Binance Chain."
+    }
+  },
+  {
+    "name": "Toncoin",
+    "symbol": "TON",
+    "networks": [
+      {
+        "Name": "TON Blockchain",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "Toncoin (TON) is the native token of the TON Blockchain."
+    }
+  },
+  {
+    "name": "Shiba Inu",
+    "symbol": "SHIB",
+    "networks": [
+      {
+        "Name": "Ethereum",
+        "networkType": "ERC-20"
+      }
+    ],
+    "descriptions": {
+      "en": "Shiba Inu (SHIB) is an ERC-20 token on the Ethereum network."
+    }
+  },
+  {
+    "name": "Wrapped Bitcoin",
+    "symbol": "WBTC",
+    "networks": [
+      {
+        "Name": "Ethereum",
+        "networkType": "ERC-20"
+      }
+    ],
+    "descriptions": {
+      "en": "Wrapped Bitcoin (WBTC) is an ERC-20 token backed 1:1 with Bitcoin."
+    }
+  },
+  {
+    "name": "LEO Token",
+    "symbol": "LEO",
+    "networks": [
+      {
+        "Name": "Ethereum",
+        "networkType": "ERC-20"
+      }
+    ],
+    "descriptions": {
+      "en": "LEO Token (LEO) is an ERC-20 token used on the Bitfinex exchange."
+    }
+  },
+  {
+    "name": "Hedera",
+    "symbol": "HBAR",
+    "networks": [
+      {
+        "Name": "Hedera Hashgraph",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "Hedera (HBAR) is the native cryptocurrency of the Hedera Hashgraph network."
+    }
+  },
+  {
+    "name": "Ethereum Classic",
+    "symbol": "ETC",
+    "networks": [
+      {
+        "Name": "Ethereum Classic",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "Ethereum Classic (ETC) is the original Ethereum blockchain."
+    }
+  },
+  {
+    "name": "First Digital USD",
+    "symbol": "FDUSD",
+    "networks": [
+      {
+        "Name": "Ethereum",
+        "networkType": "ERC-20"
+      }
+    ],
+    "descriptions": {
+      "en": "First Digital USD (FDUSD) is a stablecoin on the Ethereum network."
+    }
+  },
+  {
+    "name": "Pepe",
+    "symbol": "PEPE",
+    "networks": [
+      {
+        "Name": "Ethereum",
+        "networkType": "ERC-20"
+      }
+    ],
+    "descriptions": {
+      "en": "Pepe (PEPE) is a meme-based ERC-20 token on Ethereum."
+    }
+  },
+  {
+    "name": "Cronos",
+    "symbol": "CRO",
+    "networks": [
+      {
+        "Name": "Crypto.org Chain",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "Cronos (CRO) is the native token of the Crypto.org Chain."
+    }
+  },
+  {
+    "name": "Mantle",
+    "symbol": "MNT",
+    "networks": [
+      {
+        "Name": "Ethereum",
+        "networkType": "ERC-20"
+      }
+    ],
+    "descriptions": {
+      "en": "Mantle (MNT) is an ERC-20 token on the Ethereum network."
+    }
+  },
+  {
+    "name": "Dogecoin",
+    "symbol": "DOGE",
+    "networks": [
+      {
+        "Name": "Dogecoin",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "Dogecoin (DOGE) is a popular meme cryptocurrency."
+    }
+  },
+  {
+    "name": "Wrapped eETH",
+    "symbol": "WETH",
+    "networks": [
+      {
+        "Name": "Ethereum",
+        "networkType": "ERC-20"
+      }
+    ],
+    "descriptions": {
+      "en": "Wrapped Ethereum (WETH) is an ERC-20 token representing Ethereum."
+    }
+  },
+  {
+    "name": "Renzo Restaked ETH",
+    "symbol": "rETH",
+    "networks": [
+      {
+        "Name": "Ethereum",
+        "networkType": "ERC-20"
+      }
+    ],
+    "descriptions": {
+      "en": "Renzo Restaked ETH (rETH) is an ERC-20 token for staked Ethereum."
+    }
+  },
+  {
+    "name": "OKB",
+    "symbol": "OKB",
+    "networks": [
+      {
+        "Name": "Ethereum",
+        "networkType": "ERC-20"
+      }
+    ],
+    "descriptions": {
+      "en": "OKB is the native utility token of the OKEx exchange."
+    }
+  },
+  {
+    "name": "Maker",
+    "symbol": "MKR",
+    "networks": [
+      {
+        "Name": "Ethereum",
+        "networkType": "ERC-20"
+      }
+    ],
+    "descriptions": {
+      "en": "Maker (MKR) is a governance token on the Ethereum blockchain."
+    }
+  },
+  {
+    "name": "Arweave",
+    "symbol": "AR",
+    "networks": [
+      {
+        "Name": "Arweave",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "Arweave (AR) is a cryptocurrency for decentralized storage."
+    }
+  },
+  {
+    "name": "Kaspa",
+    "symbol": "KAS",
+    "networks": [
+      {
+        "Name": "Kaspa",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "Kaspa (KAS) is a Layer 1 blockchain network."
+    }
+  },
+  {
+    "name": "Monero",
+    "symbol": "XMR",
+    "networks": [
+      {
+        "Name": "Monero",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "Monero (XMR) is a privacy-focused cryptocurrency."
+    }
+  },
+  {
+    "name": "Ethena USDe",
+    "symbol": "USDe",
+    "networks": [
+      {
+        "Name": "Ethereum",
+        "networkType": "ERC-20"
+      }
+    ],
+    "descriptions": {
+      "en": "Ethena USDe is a stablecoin on the Ethereum network."
+    }
+  },
+  {
+    "name": "Theta Network",
+    "symbol": "THETA",
+    "networks": [
+      {
+        "Name": "Theta",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "Theta Network (THETA) is a blockchain for video streaming."
+    }
+  },
+  {
+    "name": "Flow",
+    "symbol": "FLOW",
+    "networks": [
+      {
+        "Name": "Flow",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "Flow (FLOW) is a blockchain for NFTs and decentralized apps."
+    }
+  },
+  {
+    "name": "Beam",
+    "symbol": "BEAM",
+    "networks": [
+      {
+        "Name": "Beam",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "Beam (BEAM) is a privacy-focused cryptocurrency."
+    }
+  },
+  {
+    "name": "Bitcoin SV",
+    "symbol": "BSV",
+    "networks": [
+      {
+        "Name": "Bitcoin SV",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "Bitcoin SV (BSV) is a fork of Bitcoin Cash."
+    }
+  },
+  {
+    "name": "SingularityNET",
+    "symbol": "AGIX",
+    "networks": [
+      {
+        "Name": "Ethereum",
+        "networkType": "ERC-20"
+      }
+    ],
+    "descriptions": {
+      "en": "SingularityNET (AGIX) is a decentralized AI network."
+    }
+  },
+  {
+    "name": "Ethena",
+    "symbol": "ETHA",
+    "networks": [
+      {
+        "Name": "Ethereum",
+        "networkType": "ERC-20"
+      }
+    ],
+    "descriptions": {
+      "en": "Ethena (ETHA) is a utility token on the Ethereum blockchain."
+    }
+  },
+  {
+    "name": "Worldcoin",
+    "symbol": "WLD",
+    "networks": [
+      {
+        "Name": "Ethereum",
+        "networkType": "ERC-20"
+      }
+    ],
+    "descriptions": {
+      "en": "Worldcoin (WLD) is a cryptocurrency aiming for global usage."
+    }
+  },
+  {
+    "name": "Zebec Protocol",
+    "symbol": "ZBC",
+    "networks": [
+      {
+        "Name": "Solana",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "Zebec Protocol (ZBC) is a Solana-based token for streaming payments."
+    }
+  },
+  {
+    "name": "Ondo",
+    "symbol": "ONDO",
+    "networks": [
+      {
+        "Name": "Ethereum",
+        "networkType": "ERC-20"
+      }
+    ],
+    "descriptions": {
+      "en": "Ondo (ONDO) is an ERC-20 token for decentralized finance."
+    }
+  },
+  {
+    "name": "BitTorrent",
+    "symbol": "BTT",
+    "networks": [
+      {
+        "Name": "Tron",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "BitTorrent (BTT) is a token for decentralized file sharing."
+    }
+  },
+  {
+    "name": "Ribbon Finance",
+    "symbol": "RBN",
+    "networks": [
+      {
+        "Name": "Ethereum",
+        "networkType": "ERC-20"
+      }
+    ],
+    "descriptions": {
+      "en": "Ribbon Finance (RBN) is a DeFi protocol on Ethereum."
+    }
+  },
+  {
+    "name": "Wormhole",
+    "symbol": "WORM",
+    "networks": [
+      {
+        "Name": "Solana",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "Wormhole (WORM) is a cross-chain messaging protocol on Solana."
+    }
+  },
+  {
+    "name": "NEO",
+    "symbol": "NEO",
+    "networks": [
+      {
+        "Name": "NEO",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "NEO is a smart contract platform and cryptocurrency."
+    }
+  },
+  {
+    "name": "Akash Network",
+    "symbol": "AKT",
+    "networks": [
+      {
+        "Name": "Cosmos",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "Akash Network (AKT) is a decentralized cloud computing network."
+    }
+  },
+  {
+    "name": "MultiversX",
+    "symbol": "EGLD",
+    "networks": [
+      {
+        "Name": "MultiversX",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "MultiversX (EGLD) is a scalable blockchain for decentralized apps."
+    }
+  },
+  {
+    "name": "Gate",
+    "symbol": "GT",
+    "networks": [
+      {
+        "Name": "Ethereum",
+        "networkType": "ERC-20"
+      }
+    ],
+    "descriptions": {
+      "en": "GateToken (GT) is the native token of the Gate.io exchange."
+    }
+  },
+  {
+    "name": "KuCoin",
+    "symbol": "KCS",
+    "networks": [
+      {
+        "Name": "Ethereum",
+        "networkType": "ERC-20"
+      }
+    ],
+    "descriptions": {
+      "en": "KuCoin Token (KCS) is the native token of the KuCoin exchange."
+    }
+  },
+  {
+    "name": "eCash",
+    "symbol": "XEC",
+    "networks": [
+      {
+        "Name": "Bitcoin Cash",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "eCash (XEC) is a rebranded version of Bitcoin Cash ABC."
+    }
+  },
+  {
+    "name": "Tokenize Xchange",
+    "symbol": "TKX",
+    "networks": [
+      {
+        "Name": "Ethereum",
+        "networkType": "ERC-20"
+      }
+    ],
+    "descriptions": {
+      "en": "Tokenize Xchange (TKX) is a utility token for the Tokenize platform."
+    }
+  },
+  {
+    "name": "Starknet",
+    "symbol": "STRK",
+    "networks": [
+      {
+        "Name": "Starknet",
+        "networkType": "Layer 2"
+      }
+    ],
+    "descriptions": {
+      "en": "Starknet (STRK) is a Layer 2 scaling solution for Ethereum."
+    }
+  },
+  {
+    "name": "Marinade Staked SOL",
+    "symbol": "mSOL",
+    "networks": [
+      {
+        "Name": "Solana",
+        "networkType": "Layer 1"
+      }
+    ],
+    "descriptions": {
+      "en": "Marinade Staked SOL (mSOL) is a liquid staking token on Solana."
     }
   }
 ]

@@ -16,7 +16,7 @@ Chart.register(LineElement);
 const { Group } = Avatar;
 const youngList = Object.values(young);
 
-const Debug: NextPage = ({ params }: { params: { indexName: string } }) => {
+const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
   const [chartData, setChartData] = useState<any>();
   const [indexLimit, setIndexLimit] = useState(10);
   const [indexData, setIndexData] = useState<any>([]);
@@ -27,7 +27,7 @@ const Debug: NextPage = ({ params }: { params: { indexName: string } }) => {
       .then(response => response.json())
       .then(data => setIndexData(data))
       .catch(error => console.error("Error fetching data:", error));
-    console.log("indexData", indexData);
+    // console.log("indexData", indexData);
   }, []);
 
   useEffect(() => {
@@ -183,7 +183,7 @@ const Debug: NextPage = ({ params }: { params: { indexName: string } }) => {
                     />
                   }
                   title={
-                    <a href="https://ant.design">
+                    <a href="">
                       {
                         <>
                           {item.name}
@@ -192,7 +192,7 @@ const Debug: NextPage = ({ params }: { params: { indexName: string } }) => {
                               marginLeft: "10px",
                             }}
                           >
-                            {"Sepolia"}
+                            {youngList.find((y: any) => String(y.symbol).toLowerCase() === item.symbol.toLowerCase())?.networks?.[0].Name}
                           </Tag>
                         </>
                       }
@@ -239,4 +239,4 @@ const Debug: NextPage = ({ params }: { params: { indexName: string } }) => {
   );
 };
 
-export default Debug;
+export default IndexPage;
