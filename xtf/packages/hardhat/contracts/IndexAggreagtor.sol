@@ -6,6 +6,7 @@ import {Client} from "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.s
 import {IRouterClient} from "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IRouterClient.sol";
 import {CCIPReceiver} from "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol";
 import {LiquidityManager} from "./LiquidityManager.sol";
+import {TaggingVerifier} from "./TaggingVerifier.sol";
 
 uint32 constant CALLBACK_GAS_LIMIT = 4_000_000;
 
@@ -68,6 +69,7 @@ contract IndexAggregator is CCIPReceiver {
     
     LiquidityMessage[] public liquidityMessages;
     SupplyMessage[] public supplyMessages;
+    TaggingVerifier public taggingVerifier;
 
     uint256[] public totalSupplies;
     uint256[] public liquidities;
@@ -106,6 +108,12 @@ contract IndexAggregator is CCIPReceiver {
         }
     }
 
+    // Initialize methods
+
+    function setTaggingVerifier(address _taggingVerifier) external {
+        taggingVerifier = TaggingVerifier(_taggingVerifier);
+    }
+
     function setChainLinkData(
         address _router,
         address _link,
@@ -124,6 +132,9 @@ contract IndexAggregator is CCIPReceiver {
         chainId = _chainId;
         mainChainId = _mainChainId;
     }
+
+    // END Initialize methods
+
 
     function isMainChain() public view returns (bool) {
         return chainId == mainChainId;
@@ -243,7 +254,9 @@ contract IndexAggregator is CCIPReceiver {
     function persistIndex(uint256[] memory indexOrders, string memory tag) public returns (bool)
     {
         // indexOrders is an array index order [2,0,1] means 2nd token, 0th token, 1st token for price calculation
+        
         if(keccak256(abi.encodePacked(tag)) != keccak256(abi.encodePacked(""))) {
+            // Clean the temporary array in the future we may use transient storage for this)
             for (uint256 i = 0; i < tmpTokens.length; i++) {
                 delete tmpTokens[i];
             }
@@ -251,6 +264,11 @@ contract IndexAggregator is CCIPReceiver {
             for (uint256 i = 0; i < tokenInfo.length; i++) {
                 for (uint256 j = 0; j < tokenInfo[i]._tags.length; j++) {
                     if (keccak256(abi.encodePacked(tokenInfo[i]._tags[j])) == keccak256(abi.encodePacked(tag))) {
+                        // need to check if the tag was verified on the tagging system
+                        require(
+                            taggingVerifier.tokenSymbolToVerifiedTagsMap(tokenInfo[i]._symbol, tag) == true,
+                            "IndexAggregator: Tag not verified"
+                        );
                         tmpTokens.push(tokenInfo[i]);
                     }
                 }
@@ -261,8 +279,6 @@ contract IndexAggregator is CCIPReceiver {
         else{
            require(indexOrders.length == tokenInfo.length, "IndexAggregator: Invalid length of indexOrders");
         }
-
-
 
         uint256 token_a_value;
         uint256 token_b_value;
