@@ -1953,6 +1953,16 @@
     "@openzeppelin/hardhat-upgrades" "^1.28.0"
     "@reclaimprotocol/crypto-sdk" "^1.4.0"
 
+"@reclaimprotocol/verifier-solidity-sdk@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.npmjs.org/@reclaimprotocol/verifier-solidity-sdk/-/verifier-solidity-sdk-1.0.2.tgz"
+  integrity sha512-W3F8P+F8uU1IQe5+wQfvsoHqNRayuJLP7z4eKNN7nQm7z8ut+l20Egj/p85soIe9D7599pBhYGOCpW7roQ70QA==
+  dependencies:
+    "@nomiclabs/hardhat-ethers" "^2.2.3"
+    "@openzeppelin/contracts" "^4.9.2"
+    "@openzeppelin/hardhat-upgrades" "^1.28.0"
+    "@reclaimprotocol/crypto-sdk" "^1.4.0"
+
 "@rollup/pluginutils@^4.0.0":
   version "4.2.1"
   dependencies:
@@ -2035,6 +2045,7 @@
   resolved "file:packages/hardhat"
   dependencies:
     "@chainlink/contracts" "^1.1.0"
+    "@chainlink/contracts-ccip" "^1.4.0"
     "@chainlink/env-enc" "^1.0.5"
     "@chainlink/functions-toolkit" "^0.2.8"
     "@ethersproject/bignumber" "^5.7.0"
