@@ -218,7 +218,7 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
             style={{
               marginTop: "80px",
               minHeight: "400px",
-              width: "900px",
+              width: "1000px",
               margin: "auto",
             }}
             dataSource={
@@ -231,6 +231,7 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
               <List.Item
                 actions={[
                   <a key="list-loadmore-edit">{"Rank #" + item.market_cap_rank}</a>,
+                  <a key="list-loadmore-edit">{"$" + item.market_cap}</a>,
                   <a key="list-loadmore-more">{"Lqdty: " + Math.random().toFixed(2) + "P"}</a>,
                 ]}
               >
