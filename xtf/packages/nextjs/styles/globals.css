@@ -23,6 +23,10 @@ p {
   margin: 1rem 0;
 }
 
+nextjs-portal {
+  display: none;
+}
+
 .btn {
   @apply shadow-md;
 }
