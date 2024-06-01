@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import * as young from "../../../../../../coingecko/categories/young.json";
-import * as category from "../../../../../../coingecko/category.json";
+import * as young from "../../../../../../../coingecko/categories/young.json";
+import * as category from "../../../../../../../coingecko/category.json";
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import { Avatar, InputNumber, List, Modal, Popover, Select, Tag, Watermark } from "antd";
 import { ArcElement, CategoryScale, Chart, LineElement, LinearScale, LogarithmicScale, PointElement } from "chart.js";
