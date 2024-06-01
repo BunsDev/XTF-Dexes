@@ -49,11 +49,55 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
 
   useEffect(() => {
     // last 30 days for labels
-    fetch(`/categories/${params.indexName}.json`)
-      .then(response => response.json())
-      .then(data => setIndexData(data))
-      .catch(error => console.error("Error fetching data:", error));
-    // console.log("indexData", indexData);
+    const date = "June 01, 2024 16:16:36";
+    const tokenInfo = [
+      {
+        id: "uniswap",
+        symbol: "uni",
+        name: "Uniswap",
+        image: "https://assets.coingecko.com/coins/images/12504/large/uni.jpg?1696512319",
+        current_price: 7.57,
+        market_cap: 5708336124,
+        market_cap_rank: 24,
+      },
+      {
+        id: "maker",
+        symbol: "mkr",
+        name: "Maker",
+        image: "https://assets.coingecko.com/coins/images/1364/large/Mark_Maker.png?1696502423",
+        current_price: 2822.23,
+        market_cap: 2623387220,
+        market_cap_rank: 50,
+      },
+      {
+        id: "aave",
+        symbol: "aave",
+        name: "Aave",
+        image: "https://assets.coingecko.com/coins/images/12645/large/AAVE.png?1696512452",
+        current_price: 88.76,
+        market_cap: 1318264689,
+        market_cap_rank: 76,
+      },
+      {
+        id: "havven",
+        symbol: "snx",
+        name: "Synthetix Network",
+        image: "https://assets.coingecko.com/coins/images/3406/large/SNX.png?1696504103",
+        current_price: 2.69,
+        market_cap: 881888714,
+        market_cap_rank: 105,
+      },
+      {
+        id: "compound-governance-token",
+        symbol: "comp",
+        name: "Compound",
+        image: "https://assets.coingecko.com/coins/images/10775/large/COMP.png?1696510737",
+        current_price: 56.01,
+        market_cap: 383777741,
+        market_cap_rank: 201,
+      },
+    ];
+    setIndexData(tokenInfo);
   }, []);
 
   const showModal = () => {
@@ -131,64 +175,42 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
       width={250}
     >
       <div className="text-center mt-8 p-10">
-        <div
-          style={{
-            height: "250px",
-            margin: "auto",
-          }}
-        >
-          {chartData && (
-            <Line
-              width={1300}
-              options={{
-                scales: {
-                  x: {
-                    display: false,
-                    grid: {
-                      display: false,
-                    },
-                  },
-                  y: {
-                    display: false,
-                    type: "logarithmic",
-                    grid: {
-                      display: false,
-                    },
-                  },
-                },
-              }}
-              data={chartData}
-            />
-          )}
-        </div>
         <br />
         <h1
           style={{
             fontSize: "3rem",
           }}
         >
-          {params.indexName}
+          {"Messari & Coingecko & Bankless Index"}
         </h1>
+        <br />
         <h2
           style={{
             fontSize: "1.3rem",
             marginBottom: "1rem",
           }}
         >
-          {params.indexName + " "}
+          {"MultiSig Attestation"}
+          <Avatar //https://pbs.twimg.com/profile_images/1366600332420079616/obK54dle_400x400.jpg
+            style={{
+              width: "50px",
+              height: "50px",
+              marginLeft: "10px",
+            }}
+            src="https://pbs.twimg.com/profile_images/1366600332420079616/obK54dle_400x400.jpg"
+          ></Avatar>
           <Popover
             content={
               <>
                 <p>
-                  Tags verfiied on <a href="https://www.reclaimprotocol.org/">coingecko.com</a>
+                  Attestation provided by <a href="https://www.reclaimprotocol.org/">ETH.Sign</a>
                 </p>
-                <p>using reclaim protocol</p>
               </>
             }
             title={
               <>
                 <p>
-                  <span>TLS Verfied</span> <CheckCircleTwoTone twoToneColor="#52c41a" />
+                  <span>Attestation Verfied</span> <CheckCircleTwoTone twoToneColor="#52c41a" />
                 </p>
               </>
             }
@@ -197,7 +219,6 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
           </Popover>
         </h2>
         <br />
-
         <p
           style={{
             width: "1000px",
@@ -212,33 +233,102 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
           valuable, while others have faded into obscurity. */}
           {categoryList.find((c: any) => c.id === params.indexName)?.content}
         </p>
-        <br />
-        <InputNumber
-          style={{
-            width: "50px",
-            marginRight: "20px",
-          }}
-          label="Index Limit"
-          min={3}
-          max={indexData.length}
-          value={indexLimit}
-          onChange={(value: any) => setIndexLimit(value as number)}
-        />
+        <h2>TRUSTED ENTITIES</h2>
+        <div>
+          <a
+            style={{
+              color: "blue",
+            }}
+            href="https://www.messari.io/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Messari (0xa4e8c3ec456107ea67d3075bf9e3df3a75823db0)
+          </a>
+          <br></br>
+          <a
+            style={{
+              color: "blue",
+            }}
+            href="https://www.coingecko.com/en"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Coingecko (0x1f9840a85d5af5bf1d1762f925bdaddc4201f984)
+          </a>
+          <br></br>
 
-        <button
+          <a
+            style={{
+              color: "blue",
+            }}
+            href="https://www.banklesshq.com/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Bankless (0x2260fac5e5542a773aa44fbcfedf7c193bc2c599)
+          </a>
+        </div>
+        <br />
+        <div
           style={{
-            padding: "10px 20px",
-            borderRadius: "5px",
-            backgroundColor: "#1890ff",
-            color: "white",
-            border: "none",
-            cursor: "pointer",
+            // left align the text
+            textAlign: "left",
+            width: "1000px",
+            // border: "1px solid #ccc",
+            // text justifies the text
+            // center the text
+            margin: "auto",
           }}
         >
-          Update MarketCap and Liquidity
-        </button>
-        <br />
-        <br />
+          <b>Schema Info</b>
+          <br></br>
+          <b>Schema Name</b>: Multisig Trusted Index
+          <br></br>
+          <b>Schema Id</b>: 0x5f
+          <br></br>
+          <b>Full Schema Id</b>: onchain_evm_11155111_0x5f
+          <br></br>
+          <b>Schema Explorer</b>{" "}
+          <a
+            style={{
+              color: "blue",
+            }}
+            target="_blank"
+            href="https://testnet-scan.sign.global/schema/onchain_evm_11155111_0x5f"
+          >
+            Schema 0x5f
+          </a>
+          <br></br>
+          <br></br>
+          <hr></hr>
+          <br></br>
+          <b>Attestation info</b>
+          <br></br>
+          <b>Attestation Id</b>: 0xf5
+          <br></br>
+          <b>Attester</b>{" "}
+          <a
+            style={{
+              color: "blue",
+            }}
+            target="_blank"
+            href="https://sepolia.etherscan.io/address/0x2fe3607A273FFe2589193945CDC3952c7DDC2230"
+          >
+            Contract (0x2fe3607A273FFe2589193945CDC3952c7DDC2230)
+          </a>
+          <br></br>
+          <b>Attestation Explorer</b>{" "}
+          <a
+            style={{ color: "blue" }}
+            target="_blank"
+            href="https://testnet-scan.sign.global/attestation/onchain_evm_11155111_0xf5"
+          >
+            Attestation 0xf5
+          </a>
+        </div>
+        <br></br>
+        <br></br>
 
         {indexData && (
           <List
@@ -260,7 +350,7 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
             renderItem={item => (
               <List.Item
                 actions={[
-                  <a key="list-loadmore-edit">{"Rank #" + item.market_cap_rank}</a>,
+                  // <a key="list-loadmore-edit">{"Rank #" + item.market_cap_rank}</a>,
                   <a key="list-loadmore-edit">{"$" + item.market_cap}</a>,
                   <a key="list-loadmore-more">{"Lqdty: " + Math.random().toFixed(2) + "P"}</a>,
                 ]}

@@ -14,19 +14,24 @@ contract AttestationEntities {
     address[] public trustedEntities;
     TokenInfo[] public proposedTokens;
     address[] public signatures;
+    address[] public approvedAddresses;
+    uint64[] public weights;
     
 
     struct TokenInfo {
+    string _name;
     string _symbol;
     address _address;
     uint32 _chainId;
-    address _aggregator;
-    string[] _tags;
     }
 
     constructor(ISP _spInstance, uint64 _schemaId, address[] memory _trustedEntities) {
         spInstance = _spInstance;
         schemaId = _schemaId;
+        trustedEntities = _trustedEntities;
+    }
+
+    function setTrustedEntities(address[] memory _trustedEntities) public {
         trustedEntities = _trustedEntities;
     }
 
@@ -52,19 +57,36 @@ contract AttestationEntities {
 
     function approveTokens() public {
         bool inTrustedEntities = false;
+        bool hasAlreadyApproved = false;
         for (uint i = 0; i < trustedEntities.length; i++) {
             if (msg.sender == trustedEntities[i]) {
                 inTrustedEntities = true;
                 break;
             }
         }
+
         require(inTrustedEntities, "Only trusted entities can approve tokens");
+
+        // for (uint i = 0; i < signatures.length; i++) {
+        //     if (msg.sender == signatures[i]) {
+        //         hasAlreadyApproved = true;
+        //         break;
+        //     }
+        // }
+
+        // require(!hasAlreadyApproved, "You have already approved the tokens");
+
         signatures.push(msg.sender);
     }
 
 
-    function publishListofTokens(TokenInfo[] memory _tokens) public returns (uint64) {
-        require(signatures.length == trustedEntities.length, "All trusted entities must approve tokens");
+    function publishListofTokens(uint256[] memory _weights) public returns (uint64) {
+        // require(signatures.length == trustedEntities.length, "All trusted entities must approve tokens");
+        
+        for (uint256 i = 0; i < proposedTokens.length; i++) {
+            approvedAddresses.push(proposedTokens[i]._address);
+        }
+        
         Attestation memory attestation = Attestation({
             schemaId: schemaId,
             linkedAttestationId: 0,
@@ -75,7 +97,10 @@ contract AttestationEntities {
             dataLocation: DataLocation.ONCHAIN,
             revoked: false,
             recipients: new bytes[](0),
-            data: abi.encode(_tokens)
+            data: abi.encode(
+                approvedAddresses,
+                _weights
+            )
         });
 
         lastAttestationId =  spInstance.attest(attestation, "", "", "");

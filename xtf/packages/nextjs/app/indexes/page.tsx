@@ -136,7 +136,7 @@ const Debug: NextPage = () => {
             <Card
               title={
                 <a
-                  href="/indexes/0"
+                  href="/indexes/attestationprotocol/multisig"
                   // target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -166,7 +166,39 @@ const Debug: NextPage = () => {
                   textAlign: "left",
                 }}
               >
-                <b>Reclaim AppId:</b> 0x15dB9F453C222CEfDb87ecb91d6B47124C58B488
+                <b>Trusted entuty:</b>
+                <a
+                  style={{
+                    color: "blue",
+                  }}
+                  href="https://messari.io/"
+                >
+                  {" "}
+                  Messari
+                </a>{" "}
+                <br />
+                <b>Trusted entuty:</b>
+                <a
+                  style={{
+                    color: "blue",
+                  }}
+                  href="https://www.coingecko.com/en"
+                >
+                  {" "}
+                  Coingecko
+                </a>{" "}
+                <br />
+                <b>Trusted entuty:</b>
+                <a
+                  style={{
+                    color: "blue",
+                  }}
+                  href="https://www.bankless.com/"
+                >
+                  {" "}
+                  Bankless
+                </a>{" "}
+                <br />
                 <br></br>
                 <b>Origin URL</b> :{" "}
                 <a
@@ -177,13 +209,8 @@ const Debug: NextPage = () => {
                     color: "blue",
                   }}
                 >
-                  Forbes- Defi pulse URL
+                  Attestation URL
                 </a>
-                <br></br>
-                <br></br>
-                The Defi Pulse Index (DPI) is designed to track the performance of a selection of the largest and most
-                liquid DeFi tokens. The index is weighted based on the value of each token's circulating supply.
-                <br />
               </p>
               <br />
             </Card>
@@ -236,7 +263,7 @@ const Debug: NextPage = () => {
                       <a
                         // remove also ( )
                         // href={`/indexes/${c.name.toLowerCase().replace(/\(|\)/g, "").replace(/\s/g, "-")}`}
-                        href={`/indexes/${c.id}`}
+                        href={`/indexes/aggregator/${c.id}`}
                         // target="_blank"
                         rel="noopener noreferrer"
                       >
