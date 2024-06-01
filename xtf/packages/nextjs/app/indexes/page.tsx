@@ -6,8 +6,8 @@ import * as category from "../../../../../coingecko/category.json";
 import * as market from "../../../../../coingecko/market.json";
 import { Avatar, Card, Col, Divider, InputNumber, List, Row, Select, Switch, Tag } from "antd";
 import { Watermark } from "antd";
+import { Steps } from "antd";
 import type { NextPage } from "next";
-import { useContractWrite } from "wagmi";
 import { getAllContracts } from "~~/utils/scaffold-eth/contractsData";
 
 const { Group } = Avatar;
@@ -33,8 +33,6 @@ const Debug: NextPage = () => {
   // });
 
   const contractsData = getAllContracts();
-
-
 
   return (
     <>
@@ -70,12 +68,15 @@ const Debug: NextPage = () => {
         <br />
         <br />
 
+
+        <br></br>
+
         <Row gutter={130}>
           <Col span={8}>
             <Card
               title={
                 <a
-                  href="/indexes/0"
+                  href="/indexes/tlsoracle/forbes"
                   // target="_blank"
                   rel="noopener noreferrer"
                 >

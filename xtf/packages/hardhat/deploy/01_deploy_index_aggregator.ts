@@ -1,16 +1,17 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
-import { IndexCentralisedData, MockUniswapV3Factory } from "../typechain-types";
+import { IndexAggregator, MockUniswapV3Factory, MockUniswapV3Pool, TaggingVerifier } from "../typechain-types";
 import { networks } from "../scripts/networks";
-import { SubscriptionManager, SecretsManager, Location } from "@chainlink/functions-toolkit";
-import { JsonRpcProvider } from "@ethersproject/providers";
-import { Wallet } from "@ethersproject/wallet";
+// import { SubscriptionManager, SecretsManager, Location } from "@chainlink/functions-toolkit";
+// import { JsonRpcProvider } from "@ethersproject/providers";
+// import { Wallet } from "@ethersproject/wallet";
 import * as markets from "../../../../coingecko/market.json";
 import * as category from "../../../../coingecko/category.json";
 import fs from "fs";
-import path from "path";
+import path, { parse } from "path";
 import { BigNumber } from "@ethersproject/bignumber";
 import { Mock } from "node:test";
+import { parseEther } from "ethers";
 const feeTier = 500;
 
 const categoryObject = new Map<string, any[]>();
@@ -19,6 +20,8 @@ const tokenDetails = new Map<string, any>();
 
 const tokenInfo = [] as any[];
 
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const sleepTime = 10000;
 // import { config } from "@chainlink/env-enc";
 /**
  * Deploys a contract named "YourContract" using the deployer account and
@@ -35,7 +38,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
     await deploy("MockUSDC", {
       from: deployer,
-      args: ["USDC", "USDC", 6],
+      args: [],
       log: true,
     });
     await deploy("MockUniswapV3Factory", {
@@ -43,7 +46,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
       log: true,
     });
     const mockUSDC = await hre.ethers.getContract("MockUSDC");
-    const mockUniswapV3Factory = (await hre.ethers.getContract("MockUniswapV3Factory")) as MockUniswapV3Factorya;
+    const mockUniswapV3Factory = (await hre.ethers.getContract("MockUniswapV3Factory")) as MockUniswapV3Factory;
 
     await deploy("LiquidityManager", {
       from: deployer,
@@ -53,8 +56,12 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     const liquidityManager = await hre.ethers.getContract("LiquidityManager");
 
     const marketArray = Object.values(markets);
-    const categoryArray = Object.values(category);
-    // .slice(0, 1);
+    // id == governance
+    let categoryArray = Object.values(category);
+
+    categoryArray = [categoryArray.find(c => c.id === "governance") as any];
+
+    console.log("category", categoryArray);
 
     for (let i = 0; i < categoryArray.length; i++) {
       const category = categoryArray[i];
@@ -74,14 +81,16 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
         );
 
         const categoryDataJSON = JSON.parse(categoryData);
-        for (let j = 0; j < categoryDataJSON.length; j++) {
+        const length = 12; //categoryDataJSON.length;
+
+        for (let j = 0; j < length; j++) {
           const market = categoryDataJSON[j];
           const symbol = market?.symbol;
           const priceObject = marketArray.find(m => m.symbol === symbol);
           if (priceObject !== undefined) {
             categoryObject.get(categoryID)?.push(symbol);
             if (tokenDetails.get(symbol) === undefined) {
-              const decimals = 8;
+              const decimals = 10;
               const circulatingSupply = BigNumber.from(String(priceObject.circulating_supply).replace(".", "")).mul(
                 BigNumber.from("10").pow(
                   decimals - (String(priceObject.circulating_supply).split(".")[1]?.length || 0),
@@ -112,8 +121,8 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
               const mockAggregator = await hre.ethers.getContract("MockAggregator");
 
               const minLiquidity = priceObject.total_volume * 0.05;
-              const maxLiquidity = priceObject.total_volume * 0.5;
-              let liquidity = Math.floor(Math.random() * (maxLiquidity - minLiquidity + 1) + minLiquidity);
+              const maxLiquidity = priceObject.total_volume * 0.3;
+              const liquidity = Math.floor(Math.random() * (maxLiquidity - minLiquidity + 1) + minLiquidity);
 
               await deploy("MockUniswapV3Pool", {
                 from: deployer,
@@ -128,12 +137,18 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
               const pool = await hre.ethers.getContract("MockUniswapV3Pool");
 
-              mockUniswapV3Factory.setPool(
+              await sleep(sleepTime);
+              console.log("Sleeping Finished");
+
+              await mockUniswapV3Factory.setPool(
                 await simpleERC20.getAddress(),
                 await mockUSDC.getAddress(),
                 feeTier,
                 await pool.getAddress(),
               );
+
+              console.log("Pool Set");
+              await sleep(sleepTime);
 
               tokenInfo.push({
                 _symbol: priceObject.symbol,
@@ -152,15 +167,51 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
       }
     }
 
-    await deploy("IndexAggregator", {
+    // print on a file all the arguments of the index aggregator called args.json
+    const sepoliaToChaido = "0x3E842E3A79A00AFdd03B52390B1caC6306Ea257E";
+    const providerHash = ["0x9db032812994aabd3f3d25635ab22336a699bf3cf9b9ef84e547bbd8f7d0ae25"];
+
+    await deploy("TaggingVerifier", {
       from: deployer,
-      args: [tokenInfo, 60, 5, await liquidityManager.getAddress()],
+      args: [providerHash],
       log: true,
     });
+
+    const taggingVerifier = (await hre.ethers.getContract("TaggingVerifier")) as TaggingVerifier;
+
+    await deploy("IndexAggregator", {
+      from: deployer,
+      args: [
+        tokenInfo,
+        await liquidityManager.getAddress(),
+        sepoliaToChaido,
+        {
+          _timeWindow: 60,
+          _sampleSize: 30,
+          bribeUnit: parseEther("0.05"),
+        },
+      ],
+      log: true,
+    });
+
+    const indexAggregator = (await hre.ethers.getContract("IndexAggregator")) as IndexAggregator;
+    await indexAggregator.setTaggingVerifier(await taggingVerifier.getAddress());
 
     for (let i = 0; i < categoryArray.length; i++) {
       console.log(categoryArray[i]?.id, categoryObject.get(categoryArray[i]?.id)?.length);
     }
+
+    fs.writeFileSync(
+      path.resolve(__dirname, "../args.json"),
+      // remove later the categoryArray
+      JSON.stringify([tokenInfo, 60, 5, await liquidityManager.getAddress(), categoryArray], null, 2),
+    );
+
+    // verify the contract on etherscan
+    await hre.run("verify:verify", {
+      address: await indexAggregator.getAddress(),
+      constructorArguments: [tokenInfo, 60, 5, await liquidityManager.getAddress()],
+    });
   }
 };
 

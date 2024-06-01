@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import * as young from "../../../../../../../coingecko/categories/young.json";
 import * as category from "../../../../../../../coingecko/category.json";
 import { CheckCircleTwoTone } from "@ant-design/icons";
-import { Avatar, InputNumber, List, Modal, Popover, Select, Tag, Watermark } from "antd";
+import { Avatar, InputNumber, List, Modal, Popover, Select, Steps, Tag, Watermark } from "antd";
 import { ArcElement, CategoryScale, Chart, LineElement, LinearScale, LogarithmicScale, PointElement } from "chart.js";
 import type { NextPage } from "next";
 import { Line, Pie } from "react-chartjs-2";
@@ -234,6 +234,67 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
           {categoryList.find((c: any) => c.id === params.indexName)?.content}
         </p>
         <br />
+        <Steps
+          style={{
+            width: "1000px",
+            // border: "1px solid #ccc",
+            // text justifies the text
+            // center the text
+            margin: "auto",
+          }}
+          current={2}
+          items={[
+            {
+              title: "Tokens Proposed",
+              description: "One of the trusted entities has proposed the tokens and the weights for the index.",
+              subTitle: (
+                <a
+                  style={{
+                    color: "green",
+                    textDecoration: "underline",
+                  }}
+                  href="https://sepolia.etherscan.io/tx/0x7f8f0a55df5fe0dbc4ee591ef7660a3304003d8b8850a171ccbca379efdb8e70"
+                >
+                  TXhash (0x7f8)
+                </a>
+              ),
+            },
+            {
+              title: "Approved",
+              description: "All the trusted entities have approved the tokens and the weights for the index.",
+              subTitle: (
+                <a
+                  style={{
+                    color: "green",
+                    textDecoration: "underline",
+                  }}
+                  href="https://sepolia.etherscan.io/tx/0xe3bc877a71b6e194b245de01af285b6768597906a3d0255b4b4a555cd79e4705"
+                >
+                  TXhash (0xe3b)
+                </a>
+              ),
+            },
+            {
+              title: "Publish List of Tokens",
+              subTitle: (
+                <a
+                  style={{
+                    color: "green",
+                    textDecoration: "underline",
+                  }}
+                  href="https://sepolia.etherscan.io/tx/0x88f9a23993945c84d4accb1f2601cdd237c82d0ee3ad290e0f78bea5b803ac96"
+                >
+                  TXhash (0x88f)
+                </a>
+              ),
+              description:
+                "Approved tokens are listed in an ETHSign attestation on the blockchain with their respective weights.",
+            },
+          ]}
+        />
+        <br />
+        <br />
+
         <div
           style={{
             // left align the text
