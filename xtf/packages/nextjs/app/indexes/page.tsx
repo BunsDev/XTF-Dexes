@@ -7,6 +7,8 @@ import * as market from "../../../../../coingecko/market.json";
 import { Avatar, Card, Col, Divider, InputNumber, List, Row, Select, Switch, Tag } from "antd";
 import { Watermark } from "antd";
 import type { NextPage } from "next";
+import { useContractWrite } from "wagmi";
+import { getAllContracts } from "~~/utils/scaffold-eth/contractsData";
 
 const { Group } = Avatar;
 const youngList = Object.values(young);
@@ -15,6 +17,24 @@ const Debug: NextPage = () => {
   const [showAll, setShowAll] = useState(false);
   const indexData = Object.values(market);
   const indexLimit = 20;
+
+  const contractName = "TLSIndexNotary";
+
+  // const { isFetching: isFetToken, refetch: tokensFetch } = useContractRead({
+  //   address: contractsData[contractName].address,
+  //   functionName: "verifyProof",
+  //   abi: contractsData[contractName].abi,
+  //   args: [],
+  //   enabled: false,
+  //   onError: (error: any) => {
+  //     const parsedErrror = getParsedError(error);
+  //     console.log(parsedErrror);
+  //   },
+  // });
+
+  const contractsData = getAllContracts();
+
+
 
   return (
     <>

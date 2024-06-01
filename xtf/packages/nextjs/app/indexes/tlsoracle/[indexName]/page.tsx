@@ -11,7 +11,9 @@ import type { NextPage } from "next";
 import { Line, Pie } from "react-chartjs-2";
 import ReactJson from "react-json-view";
 import QRCode from "react-qr-code";
+import { useWriteContract } from "wagmi";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { getAllContracts } from "~~/utils/scaffold-eth/contractsData";
 
 Chart.register(CategoryScale);
 Chart.register(LinearScale);
@@ -49,6 +51,7 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
   const [url, setUrl] = useState("");
   const [ready, setReady] = useState(true);
   const [proof, setProof] = useState<any>();
+  const [showList, setShowList] = useState(false);
 
   const { targetNetwork } = useTargetNetwork();
 
@@ -153,6 +156,13 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
     ];
     setIndexData(tokenInfo);
   }, []);
+
+  const contractName = "TLSIndexNotary";
+  const contractsData = getAllContracts();
+
+  console.log("contractsData", contractsData);
+
+  const { writeContract } = useWriteContract();
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -323,6 +333,7 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
               style={{
                 padding: "5px 10px",
                 borderRadius: "5px",
+                marginRight: "10px",
                 backgroundColor: "#f56a00",
                 color: "white",
                 border: "none",
@@ -332,6 +343,52 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
             >
               Open link
             </button>
+            {!proof.loading && (
+              <button
+                style={{
+                  padding: "5px 10px",
+                  borderRadius: "5px",
+                  marginRight: "10px",
+                  // green
+                  backgroundColor: "#52c41a",
+                  color: "white",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+                onClick={async () => {
+                  await writeContract({
+                    address: contractsData[contractName].address,
+                    functionName: "verifyProof",
+                    abi: contractsData[contractName].abi,
+                    args: [
+                      {
+                        claimInfo: {
+                          provider: proof?.claimData?.provider,
+                          parameters: proof?.claimData?.parameters,
+                          context: proof?.claimData?.context,
+                        },
+
+                        signedClaim: {
+                          claim: {
+                            identifier: proof?.identifier,
+                            owner: proof?.claimData?.owner,
+                            timestampS: proof?.claimData?.timestampS,
+                            epoch: proof?.claimData?.epoch,
+                          },
+                          signatures: proof?.signatures,
+                        },
+                      },
+                      "maker,uniswap,lido,aave,synthetix,yearn,balancer,weth,compound",
+                    ],
+                  });
+                  setShowList(true);
+                  console.log("proof", proof);
+                }}
+              >
+                Verify Proof
+              </button>
+            )}
+
             <br></br>
             <br></br>
             <br></br>
@@ -439,7 +496,7 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
         <br /> */}
         <br></br>
         <br></br>
-        {indexData && proof && !proof.loading && (
+        {showList && !proof.loading && (
           <List
             // className="demo-loadmore-list"
             itemLayout="horizontal"
@@ -517,7 +574,7 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
         )}
         {/* central button for launch an XTF Fund */}
         <br />
-        {proof && !proof.loading && (
+        {showList && proof && !proof.loading && (
           <button
             style={{
               padding: "10px 20px",

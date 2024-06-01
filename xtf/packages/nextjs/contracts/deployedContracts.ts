@@ -708,7 +708,7 @@ const deployedContracts = {
       },
     },
     SimpleERC20: {
-      address: "0x8eC76f6dCd267a4fc2dD419a6B0B78b61D31C6F9",
+      address: "0x867198E4cAecfD20b91Ee72F7B25d53bFF1faBc1",
       abi: [
         {
           inputs: [
@@ -1077,6 +1077,224 @@ const deployedContracts = {
         transfer: "@openzeppelin/contracts/token/ERC20/ERC20.sol",
         transferFrom: "@openzeppelin/contracts/token/ERC20/ERC20.sol",
       },
+    },
+    TLSIndexNotary: {
+      address: "0x96f36272039a49fec784F0a47A72bAC88Cff014f",
+      abi: [
+        {
+          inputs: [
+            {
+              internalType: "string[]",
+              name: "_providersHashes",
+              type: "string[]",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "constructor",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "defiPulseIndexForbes",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "lastUpdateTimestamp",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "providersHashes",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "reclaimAddress",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "string",
+              name: "tokenSymbol",
+              type: "string",
+            },
+            {
+              internalType: "address",
+              name: "tokenAddress",
+              type: "address",
+            },
+          ],
+          name: "setTokenAddress",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "string",
+              name: "str",
+              type: "string",
+            },
+          ],
+          name: "split",
+          outputs: [
+            {
+              internalType: "string[]",
+              name: "",
+              type: "string[]",
+            },
+          ],
+          stateMutability: "pure",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          name: "tokenSymbolToAddress",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              components: [
+                {
+                  components: [
+                    {
+                      internalType: "string",
+                      name: "provider",
+                      type: "string",
+                    },
+                    {
+                      internalType: "string",
+                      name: "parameters",
+                      type: "string",
+                    },
+                    {
+                      internalType: "string",
+                      name: "context",
+                      type: "string",
+                    },
+                  ],
+                  internalType: "struct Claims.ClaimInfo",
+                  name: "claimInfo",
+                  type: "tuple",
+                },
+                {
+                  components: [
+                    {
+                      components: [
+                        {
+                          internalType: "bytes32",
+                          name: "identifier",
+                          type: "bytes32",
+                        },
+                        {
+                          internalType: "address",
+                          name: "owner",
+                          type: "address",
+                        },
+                        {
+                          internalType: "uint32",
+                          name: "timestampS",
+                          type: "uint32",
+                        },
+                        {
+                          internalType: "uint32",
+                          name: "epoch",
+                          type: "uint32",
+                        },
+                      ],
+                      internalType: "struct Claims.CompleteClaimData",
+                      name: "claim",
+                      type: "tuple",
+                    },
+                    {
+                      internalType: "bytes[]",
+                      name: "signatures",
+                      type: "bytes[]",
+                    },
+                  ],
+                  internalType: "struct Claims.SignedClaim",
+                  name: "signedClaim",
+                  type: "tuple",
+                },
+              ],
+              internalType: "struct Reclaim.Proof",
+              name: "proof",
+              type: "tuple",
+            },
+            {
+              internalType: "string",
+              name: "tokenListParamsString",
+              type: "string",
+            },
+          ],
+          name: "verifyProof",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {},
     },
   },
 } as const;
