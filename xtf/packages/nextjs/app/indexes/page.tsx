@@ -5,8 +5,8 @@ import * as young from "../../../../../coingecko/categories/young.json";
 import * as category from "../../../../../coingecko/category.json";
 import * as market from "../../../../../coingecko/market.json";
 import { Avatar, Card, Col, Divider, InputNumber, List, Row, Select, Skeleton, Tag } from "antd";
-import type { NextPage } from "next";
 import { Watermark } from "antd";
+import type { NextPage } from "next";
 
 const { Group } = Avatar;
 const youngList = Object.values(young);
@@ -27,6 +27,195 @@ const Debug: NextPage = () => {
           Indexes
         </h1>
         <Divider orientation="left"></Divider>
+        <h1
+          style={{
+            fontSize: "1.5rem",
+            marginBottom: "1rem",
+          }}
+        >
+          TLS Oracle Indexes
+        </h1>
+        <h2>
+          <Avatar
+            style={{
+              width: "30px",
+              height: "30px",
+              marginRight: "10px",
+            }}
+            src="https://pbs.twimg.com/profile_images/1737538221880315905/RSy15epn_400x400.jpg"
+          ></Avatar>
+          Attestations provided through <b>Reclaim</b> Protocol.
+        </h2>
+        <br />
+        <br />
+
+        <Row gutter={130}>
+          <Col span={8}>
+            <Card
+              title={
+                <a
+                  href="/indexes/0"
+                  // target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Defi Pulse Index (DPI) by Forbes
+                </a>
+              }
+              bordered={false}
+              style={{
+                height: "220px",
+                overflow: "hidden",
+              }}
+              extra={
+                <Group maxCount={3} size="large" maxStyle={{ color: "#f56a00", backgroundColor: "#fde3cf" }}>
+                  <Avatar src="https://freelogopng.com/images/all_img/1684047661forbes-icon-png.png" />
+                </Group>
+              }
+            >
+              <p
+                style={{
+                  display: "-webkit-box",
+                  lineHeight: "1.2em",
+                  height: "6em",
+                  WebkitLineClamp: 5,
+                  whiteSpace: "pre-wrap",
+                  textAlign: "left",
+                }}
+              >
+                <b>Reclaim AppId:</b> 0x15dB9F453C222CEfDb87ecb91d6B47124C58B488
+                <br></br>
+                <b>Origin URL</b> :{" "}
+                <a
+                  href="https://www.forbes.com/digital-assets/categories/defi-pulse-index-dpi/?sh=3950c3fe77ab"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: "blue",
+                  }}
+                >
+                  Forbes- Defi pulse URL
+                </a>
+                <br></br>
+                <br></br>
+                The Defi Pulse Index (DPI) is designed to track the performance of a selection of the largest and most
+                liquid DeFi tokens. The index is weighted based on the value of each token's circulating supply.
+                <br />
+              </p>
+              <br />
+            </Card>
+            <br />
+          </Col>
+        </Row>
+        <br />
+        <Divider orientation="left"></Divider>
+        <h1
+          style={{
+            fontSize: "1.5rem",
+            marginBottom: "1rem",
+          }}
+        >
+          Signature Protocols & Attestation Providers
+        </h1>
+        <h2>
+          <Avatar
+            style={{
+              width: "45px",
+              height: "45px",
+              marginRight: "10px",
+            }}
+            src="https://img.cryptorank.io/coins/eth_sign1666614067820.png"
+          ></Avatar>
+          Attestations provided through <b>ETH.Sign</b> Protocol.
+        </h2>
+        <br />
+        <br />
+
+        <Row gutter={130}>
+          <Col span={8}>
+            <Card
+              title={
+                <a
+                  href="/indexes/0"
+                  // target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  MultiSig Attestation
+                </a>
+              }
+              bordered={false}
+              style={{
+                height: "220px",
+                overflow: "hidden",
+              }}
+              extra={
+                <Group maxCount={3} size="large" maxStyle={{ color: "#f56a00", backgroundColor: "#fde3cf" }}>
+                  <Avatar src="https://yt3.googleusercontent.com/YSnvnM1YCBJCkRZkZlnfjHCstaEuYh9hVhGC30Yr4X8yKWZRNIjj1RZMdRz2o9GzhSn1ycNP=s900-c-k-c0x00ffffff-no-rj" />
+                  <Avatar src="https://yt3.googleusercontent.com/GojVNnQxHXs5QQktrtrUq145i_p4zFnRuiriuS7y170sRtezL79Ke86DkIkiiBH7CnH0nKcCkg=s900-c-k-c0x00ffffff-no-rj" />
+                  <Avatar src=" https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2RCExxal8BLDfwx7PH1VXZXS9YH9LW0YZUVS16P0JETXdWLSxOgMTOO8zyF66uvT37T8&usqp=CAU"/>
+                </Group>
+                  
+                 
+              }
+            >
+              <p
+                style={{
+                  display: "-webkit-box",
+                  lineHeight: "1.2em",
+                  height: "6em",
+                  WebkitLineClamp: 5,
+                  whiteSpace: "pre-wrap",
+                  textAlign: "left",
+                }}
+              >
+                <b>Reclaim AppId:</b> 0x15dB9F453C222CEfDb87ecb91d6B47124C58B488
+                <br></br>
+                <b>Origin URL</b> :{" "}
+                <a
+                  href="https://www.forbes.com/digital-assets/categories/defi-pulse-index-dpi/?sh=3950c3fe77ab"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: "blue",
+                  }}
+                >
+                  Forbes- Defi pulse URL
+                </a>
+                <br></br>
+                <br></br>
+                The Defi Pulse Index (DPI) is designed to track the performance of a selection of the largest and most
+                liquid DeFi tokens. The index is weighted based on the value of each token's circulating supply.
+                <br />
+              </p>
+              <br />
+            </Card>
+            <br />
+          </Col>
+        </Row>
+        <br />
+        <br />
+        <Divider orientation="left"></Divider>
+        <h1
+          style={{
+            fontSize: "1.5rem",
+            marginBottom: "1rem",
+          }}
+        >
+          Price Oralces & OnChain aggregators
+        </h1>
+        <h2>
+          <Avatar
+            style={{
+              width: "30px",
+              height: "30px",
+              marginRight: "10px",
+            }}
+            src="https://assets.coingecko.com/coins/images/877/large/chainlink-new-logo.png?1696502009"
+          ></Avatar>
+          Powered by <b>ChainLink</b> Data Feeds
+        </h2>
+        <br />
+        <br />
+
         <Row gutter={130}>
           {category
             // get the first 10 categories
