@@ -4,10 +4,13 @@ import { useEffect, useState } from "react";
 import * as young from "../../../../../../../coingecko/categories/young.json";
 import * as category from "../../../../../../../coingecko/category.json";
 import { CheckCircleTwoTone } from "@ant-design/icons";
+import { Reclaim } from "@reclaimprotocol/js-sdk";
 import { Avatar, InputNumber, List, Modal, Popover, Select, Tag, Watermark } from "antd";
 import { ArcElement, CategoryScale, Chart, LineElement, LinearScale, LogarithmicScale, PointElement } from "chart.js";
 import type { NextPage } from "next";
 import { Line, Pie } from "react-chartjs-2";
+import ReactJson from "react-json-view";
+import QRCode from "react-qr-code";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 
 Chart.register(CategoryScale);
@@ -20,6 +23,8 @@ Chart.register(ArcElement);
 const { Group } = Avatar;
 const youngList = Object.values(young);
 const categoryList = Object.values(category);
+
+const reclaimClient = new Reclaim.ProofRequest("0x015ee8411294AAA16dB7274bDA515ee147eAFb70");
 
 const colors = [
   "rgb(255, 99, 132)",
@@ -41,19 +46,112 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
   const [indexData, setIndexData] = useState<any>([]);
   const [equalWeighted, setEqualWeighted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const [etehreumTimeStamp, setEthereumTimeStamp] = useState<any>(new Date().toLocaleDateString());
-  const [binanceTimeStamp, setBinanceTimeStamp] = useState<any>(new Date().toLocaleDateString());
+  const [url, setUrl] = useState("");
+  const [ready, setReady] = useState(true);
+  const [proof, setProof] = useState<any>();
 
   const { targetNetwork } = useTargetNetwork();
 
   useEffect(() => {
     // last 30 days for labels
-    fetch(`/categories/${params.indexName}.json`)
-      .then(response => response.json())
-      .then(data => setIndexData(data))
-      .catch(error => console.error("Error fetching data:", error));
+    // wait for 15 seconds before fetching the data
+    setTimeout(() => {
+      fetch(`/${"proofs"}.json`)
+        .then(response => response.json())
+        .then(data => setProof(data))
+        .catch(error => console.error("Error fetching data:", error));
+    }, 15000);
+
     // console.log("indexData", indexData);
+  }, [url]);
+
+  useEffect(() => {
+    // last 30 days for labels
+    const date = "June 01, 2024 16:16:36";
+    const tokenInfo = [
+      {
+        id: "uniswap",
+        symbol: "uni",
+        name: "Uniswap",
+        image: "https://assets.coingecko.com/coins/images/12504/large/uni.jpg?1696512319",
+        current_price: 7.57,
+        market_cap: 5708336124,
+        market_cap_rank: 24,
+      },
+      {
+        id: "balancer",
+        name: "Balancer",
+        image: "https://assets.coingecko.com/coins/images/11683/large/Balancer.png?1696511572",
+        current_price: 3.55,
+        market_cap_rank: 293,
+        market_cap: 201897285,
+        symbol: "bal",
+      },
+      {
+        id: "staked-ether",
+        symbol: "steth",
+        name: "Lido Staked Ether",
+        image: "https://assets.coingecko.com/coins/images/13442/large/steth_logo.png?1696513206",
+        current_price: 3081.93,
+        market_cap: 28885052035,
+        market_cap_rank: 8,
+      },
+      {
+        id: "maker",
+        symbol: "mkr",
+        name: "Maker",
+        image: "https://assets.coingecko.com/coins/images/1364/large/Mark_Maker.png?1696502423",
+        current_price: 2822.23,
+        market_cap: 2623387220,
+        market_cap_rank: 50,
+      },
+      {
+        id: "aave",
+        symbol: "aave",
+        name: "Aave",
+        image: "https://assets.coingecko.com/coins/images/12645/large/AAVE.png?1696512452",
+        current_price: 88.76,
+        market_cap: 1318264689,
+        market_cap_rank: 76,
+      },
+      {
+        image: "https://assets.coingecko.com/coins/images/11849/large/yearn.jpg?1696511720",
+        current_price: 6889.22,
+        market_cap_rank: 271,
+        id: "yearn-finance",
+        market_cap: 229905033,
+        symbol: "yfi",
+        name: "yearn.finance",
+      },
+      {
+        image: "https://assets.coingecko.com/coins/images/2518/large/weth.png?1696503332",
+        current_price: 3066.85,
+        market_cap_rank: null,
+        id: "weth",
+        market_cap: 0.0,
+        symbol: "weth",
+        name: "WETH",
+      },
+      {
+        id: "havven",
+        symbol: "snx",
+        name: "Synthetix Network",
+        image: "https://assets.coingecko.com/coins/images/3406/large/SNX.png?1696504103",
+        current_price: 2.69,
+        market_cap: 881888714,
+        market_cap_rank: 105,
+      },
+      {
+        id: "compound-governance-token",
+        symbol: "comp",
+        name: "Compound",
+        image: "https://assets.coingecko.com/coins/images/10775/large/COMP.png?1696510737",
+        current_price: 56.01,
+        market_cap: 383777741,
+        market_cap_rank: 201,
+      },
+    ];
+    setIndexData(tokenInfo);
   }, []);
 
   const showModal = () => {
@@ -98,19 +196,33 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
       ],
     });
   }, [indexData]);
+  const getVerificationReq = async () => {
+    const APP_ID = "0x015ee8411294AAA16dB7274bDA515ee147eAFb70";
+    const reclaimClient = new Reclaim.ProofRequest(APP_ID);
+    const providerIds = [
+      "0e38076a-dfdc-4adc-a11c-8773d7836167", // Forbes-Defi-Pulse
+    ];
+    await reclaimClient.buildProofRequest(providerIds[0]);
+    const APP_SECRET = "0x1cba3e3021e062b9ac6399cbd857338f2072ecd3dbbb8509e7e1178d7e52da7c"; // your app secret key.
+    reclaimClient.setSignature(await reclaimClient.generateSignature(APP_SECRET));
+    const { requestUrl, statusUrl } = await reclaimClient.createVerificationRequest();
+    console.log("Request URL", requestUrl);
+    setUrl(requestUrl);
+    setProof({ loading: true });
+    await reclaimClient.startSession({
+      onSuccessCallback: proof => {
+        console.log("Verification success", proof);
 
-  const isOnDiffChain = (symbol: string) => {
-    const currentChain = targetNetwork.name === "Sepolia" ? "ETHEREUM" : targetNetwork.name;
-    if (currentChain === "ETHEREUM") {
-      return (
-        youngList.find((y: any) => String(y.symbol).toLowerCase() === symbol.toLowerCase())?.networks?.[0].Name !==
-        "ETHEREUM"
-      );
-    }
-    return (
-      youngList.find((y: any) => String(y.symbol).toLowerCase() === symbol.toLowerCase())?.networks?.[0].Name ===
-      "ETHEREUM"
-    );
+        setReady(true);
+        setProof(Reclaim.transformForOnchain(proof));
+        // Your business logic here
+      },
+      onFailureCallback: error => {
+        console.error("Verification failed", error);
+        // Your business logic here to handle the error
+      },
+    });
+    console.log("Session ended");
   };
 
   return (
@@ -131,73 +243,41 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
       width={250}
     >
       <div className="text-center mt-8 p-10">
-        <div
-          style={{
-            height: "250px",
-            margin: "auto",
-          }}
-        >
-          {chartData && (
-            <Line
-              width={1300}
-              options={{
-                scales: {
-                  x: {
-                    display: false,
-                    grid: {
-                      display: false,
-                    },
-                  },
-                  y: {
-                    display: false,
-                    type: "logarithmic",
-                    grid: {
-                      display: false,
-                    },
-                  },
-                },
-              }}
-              data={chartData}
-            />
-          )}
-        </div>
         <br />
         <h1
           style={{
             fontSize: "3rem",
           }}
         >
-          {params.indexName}
+          {"Forbes Top 5 Index Fund"}
         </h1>
+        <br />
         <h2
           style={{
             fontSize: "1.3rem",
             marginBottom: "1rem",
           }}
         >
-          {params.indexName + " "}
-          <Popover
-            content={
-              <>
-                <p>
-                  Tags verfiied on <a href="https://www.reclaimprotocol.org/">coingecko.com</a>
-                </p>
-                <p>using reclaim protocol</p>
-              </>
-            }
-            title={
-              <>
-                <p>
-                  <span>TLS Verfied</span> <CheckCircleTwoTone twoToneColor="#52c41a" />
-                </p>
-              </>
-            }
-          >
-            <CheckCircleTwoTone twoToneColor="#52c41a" />
-          </Popover>
+          {"TLS Proof Verified "}
+          <CheckCircleTwoTone twoToneColor="#52c41a" />
         </h2>
+        <Popover
+          content={
+            <>
+              <p>
+                Attestation provided by <a href="https://www.reclaimprotocol.org/">Reclaim Protocol</a>
+              </p>
+            </>
+          }
+          title={
+            <>
+              <p>
+                <span>TLS ZK Proof Verfied</span> <CheckCircleTwoTone twoToneColor="#52c41a" />
+              </p>
+            </>
+          }
+        ></Popover>
         <br />
-
         <p
           style={{
             width: "1000px",
@@ -212,35 +292,154 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
           valuable, while others have faded into obscurity. */}
           {categoryList.find((c: any) => c.id === params.indexName)?.content}
         </p>
-        <br />
-        <InputNumber
+        <b>Website Parsed</b>:{" "}
+        <a
           style={{
-            width: "50px",
-            marginRight: "20px",
+            color: "blue",
           }}
-          label="Index Limit"
-          min={3}
-          max={indexData.length}
-          value={indexLimit}
-          onChange={(value: any) => setIndexLimit(value as number)}
-        />
-
+          href="https://www.forbes.com/digital-assets/categories/defi-pulse-index-dpi/?sh=2d135cad77ab"
+        >
+          Forbes
+        </a>
+        <br />
+        <br />
         <button
           style={{
-            padding: "10px 20px",
+            padding: "5px 10px",
             borderRadius: "5px",
-            backgroundColor: "#1890ff",
+            marginRight: "10px",
+            backgroundColor: "#f56a00",
             color: "white",
             border: "none",
             cursor: "pointer",
           }}
+          onClick={() => getVerificationReq()}
         >
-          Update MarketCap and Liquidity
+          Generate Verification Request
         </button>
-        <br />
-        <br />
+        {url && (
+          <>
+            <button
+              style={{
+                padding: "5px 10px",
+                borderRadius: "5px",
+                backgroundColor: "#f56a00",
+                color: "white",
+                border: "none",
+                cursor: "pointer",
+              }}
+              onClick={() => window.open(url, "_blank")}
+            >
+              Open link
+            </button>
+            <br></br>
+            <br></br>
+            <br></br>
+            <p
+              style={{
+                width: "1000px",
+                margin: "auto",
+                textAlign: "left",
+              }}
+            >
+              Scan the QRCODE with the Reclaim App for generiting the proof of the attestation
+              <br></br>from the website
+              <a
+                style={{
+                  color: "blue",
+                }}
+                href="https://www.forbes.com/digital-assets/categories/defi-pulse-index-dpi/?sh=2d135cad77ab"
+              >
+                https://www.forbes.com/digital-assets/categories/defi-pulse-index-dpi/?sh=2d135cad77ab
+              </a>
+            </p>
+            <br />
+            <br />
 
-        {indexData && (
+            <QRCode
+              style={{
+                margin: "auto",
+                display: "block",
+              }}
+              value={url}
+            />
+          </>
+        )}
+        {/* <QRCode value={url} />
+
+         */}
+        <div
+          style={{
+            // left align the text
+            textAlign: "left",
+            width: "1000px",
+            // border: "1px solid #ccc",
+            // text justifies the text
+            // center the text
+            margin: "auto",
+          }}
+        >
+          <br></br>
+          <b>Proof Provider</b>:{" "}
+          <a
+            style={{
+              color: "blue",
+            }}
+            href="https://dev.reclaimprotocol.org/provider/7a1d5b75-7b6b-4709-9596-56860e8d21e6"
+          >
+            Provider URL
+          </a>
+          <br></br>
+          <b>Proof App</b>:{" "}
+          <a
+            style={{
+              color: "blue",
+            }}
+            href="https://dev.reclaimprotocol.org/applications"
+          >
+            DeFi Pulse Insight on Forbes
+          </a>
+          <br></br>
+        </div>
+        {proof && (
+          <>
+            <p
+              style={{
+                width: "1000px",
+                margin: "auto",
+                textAlign: "left",
+                // bold the text
+                fontWeight: "bold",
+              }}
+            >
+              Proof
+            </p>
+            <br />
+            <ReactJson
+              style={{
+                width: "1000px",
+                margin: "auto",
+                textAlign: "left",
+              }}
+              src={proof}
+            />
+          </>
+        )}
+        {/* {proof && <pre
+          style={{
+            overflow: "scroll",
+            backgroundColor: "#f9f9f9",
+            padding: "20px",
+            width: "1000px",
+            margin: "auto",
+            textAlign: "left",
+          }}
+        
+        >{JSON.stringify(proof, null, 2)}</pre>}
+        <br /> */}
+        <br></br>
+        <br></br>
+        {indexData && proof && !proof.loading && (
           <List
             // className="demo-loadmore-list"
             itemLayout="horizontal"
@@ -260,7 +459,7 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
             renderItem={item => (
               <List.Item
                 actions={[
-                  <a key="list-loadmore-edit">{"Rank #" + item.market_cap_rank}</a>,
+                  // <a key="list-loadmore-edit">{"Rank #" + item.market_cap_rank}</a>,
                   <a key="list-loadmore-edit">{"$" + item.market_cap}</a>,
                   <a key="list-loadmore-more">{"Lqdty: " + Math.random().toFixed(2) + "P"}</a>,
                 ]}
@@ -279,30 +478,13 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
                     <>
                       {
                         <>
-                          <Popover
-                            // set the cursor to pointer
-
-                            content={
-                              isOnDiffChain(item.symbol) ? (
-                                <p>
-                                  Click to switch to{" "}
-                                  {
-                                    youngList.find(
-                                      (y: any) => String(y.symbol).toLowerCase() === item.symbol.toLowerCase(),
-                                    )?.networks?.[0].Name
-                                  }
-                                </p>
-                              ) : (
-                                ""
-                              )
-                            }
-                          >
+                          <Popover>
                             {item.name}
                             <Tag
                               style={{
                                 cursor: "pointer",
                                 marginLeft: "10px",
-                                color: isOnDiffChain(item.symbol) ? "blue" : "green",
+                                color: "green",
                               }}
                               onClick={() => {
                                 console.log("clicked");
@@ -335,20 +517,22 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
         )}
         {/* central button for launch an XTF Fund */}
         <br />
-        <button
-          style={{
-            padding: "10px 20px",
-            borderRadius: "5px",
-            // backgroundColor: "#1890ff",
-            backgroundColor: "#f56a00",
-            color: "white",
-            border: "none",
-            cursor: "pointer",
-          }}
-          onClick={showModal}
-        >
-          Launch XTF Fund
-        </button>
+        {proof && !proof.loading && (
+          <button
+            style={{
+              padding: "10px 20px",
+              borderRadius: "5px",
+              // backgroundColor: "#1890ff",
+              backgroundColor: "#f56a00",
+              color: "white",
+              border: "none",
+              cursor: "pointer",
+            }}
+            onClick={showModal}
+          >
+            Launch XTF Fund
+          </button>
+        )}
         <Modal
           width={1200}
           title={

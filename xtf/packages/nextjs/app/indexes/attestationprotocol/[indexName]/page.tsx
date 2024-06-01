@@ -233,42 +233,6 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
           valuable, while others have faded into obscurity. */}
           {categoryList.find((c: any) => c.id === params.indexName)?.content}
         </p>
-        <h2>TRUSTED ENTITIES</h2>
-        <div>
-          <a
-            style={{
-              color: "blue",
-            }}
-            href="https://www.messari.io/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Messari (0xa4e8c3ec456107ea67d3075bf9e3df3a75823db0)
-          </a>
-          <br></br>
-          <a
-            style={{
-              color: "blue",
-            }}
-            href="https://www.coingecko.com/en"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Coingecko (0x1f9840a85d5af5bf1d1762f925bdaddc4201f984)
-          </a>
-          <br></br>
-
-          <a
-            style={{
-              color: "blue",
-            }}
-            href="https://www.banklesshq.com/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Bankless (0x2260fac5e5542a773aa44fbcfedf7c193bc2c599)
-          </a>
-        </div>
         <br />
         <div
           style={{

@@ -1,0 +1,21 @@
+{
+  "identifier": "0xbdf83fd1b3c7a05bb515db87f178a1feb9d820af08d8994ae919a863b19b996d",
+  "claimData": {
+    "provider": "http",
+    "parameters": "{\"body\":\"\",\"geoLocation\":\"\",\"method\":\"GET\",\"paramValues\":{\"aave\":\"Aave\",\"balancer\":\"Balancer\",\"compound\":\"Compound\",\"lido\":\"Lido DAO\",\"maker\":\"Maker\",\"synthetix\":\"Synthetix\",\"uniswap\":\"Uniswap\",\"weth\":\"WETH\",\"yearn\":\"yearn-finance\"},\"responseMatches\":[{\"type\":\"contains\",\"value\":\"\\\"name\\\":\\\"{{uniswap}}\\\"\"},{\"type\":\"contains\",\"value\":\"\\\"name\\\":\\\"{{maker}}\\\"\"},{\"type\":\"contains\",\"value\":\"\\\"name\\\":\\\"{{lido}}\\\"\"},{\"type\":\"contains\",\"value\":\"\\\"name\\\":\\\"{{aave}}\\\"\"},{\"type\":\"contains\",\"value\":\"\\\"name\\\":\\\"{{synthetix}} Network\\\"\"},{\"type\":\"contains\",\"value\":\"\\\"symbol\\\":\\\"{{yearn}}\\\"\"},{\"type\":\"contains\",\"value\":\"\\\"name\\\":\\\"{{balancer}}\\\"\"},{\"type\":\"contains\",\"value\":\"\\\"name\\\":\\\"{{weth}}\\\"\"},{\"type\":\"contains\",\"value\":\"\\\"name\\\":\\\"{{compound}}\\\"\"}],\"responseRedactions\":[{\"jsonPath\":\"$.assets[0].name\",\"regex\":\"\\\"name\\\":\\\"(.*)\\\"\",\"xPath\":\"\"},{\"jsonPath\":\"$.assets[1].name\",\"regex\":\"\\\"name\\\":\\\"(.*)\\\"\",\"xPath\":\"\"},{\"jsonPath\":\"$.assets[2].name\",\"regex\":\"\\\"name\\\":\\\"(.*)\\\"\",\"xPath\":\"\"},{\"jsonPath\":\"$.assets[3].name\",\"regex\":\"\\\"name\\\":\\\"(.*)\\\"\",\"xPath\":\"\"},{\"jsonPath\":\"$.assets[4].name\",\"regex\":\"\\\"name\\\":\\\"(.*) Network\\\"\",\"xPath\":\"\"},{\"jsonPath\":\"$.assets[7].symbol\",\"regex\":\"\\\"symbol\\\":\\\"(.*)\\\"\",\"xPath\":\"\"},{\"jsonPath\":\"$.assets[8].name\",\"regex\":\"\\\"name\\\":\\\"(.*)\\\"\",\"xPath\":\"\"},{\"jsonPath\":\"$.assets[9].name\",\"regex\":\"\\\"name\\\":\\\"(.*)\\\"\",\"xPath\":\"\"},{\"jsonPath\":\"$.assets[6].name\",\"regex\":\"\\\"name\\\":\\\"(.*)\\\"\",\"xPath\":\"\"}],\"url\":\"https://fda.forbes.com/v2/tradedAssets?limit=100&pageNum=1&sortBy=marketCap&direction=desc&query=&category=ftCategory&categoryId=defi-pulse-index-dpi\"}",
+    "owner": "0x8f266e3f86925c8eed4f6e22c35052212e31735a",
+    "timestampS": 1715263484,
+    "context": "{\"extractedParameters\":{\"aave\":\"Aave\",\"balancer\":\"Balancer\",\"compound\":\"Compound\",\"lido\":\"Lido DAO\",\"maker\":\"Maker\",\"synthetix\":\"Synthetix\",\"uniswap\":\"Uniswap\",\"weth\":\"WETH\",\"yearn\":\"yearn-finance\"},\"providerHash\":\"0x9db032812994aabd3f3d25635ab22336a699bf3cf9b9ef84e547bbd8f7d0ae25\"}",
+    "identifier": "0xbdf83fd1b3c7a05bb515db87f178a1feb9d820af08d8994ae919a863b19b996d",
+    "epoch": 1
+  },
+  "signatures": [
+    "0xde497f6713ca78c797ac585ad9b449cef8635ed52a66c70019efd8728705296260503f72501a2c86c476ae07bbd47df3328d81dfc465e6fde23970a689a6efb91b"
+  ],
+  "witnesses": [
+    {
+      "id": "0x244897572368eadf65bfbc5aec98d8e5443a9072",
+      "url": "https://reclaim-node.questbook.app"
+    }
+  ]
+}
