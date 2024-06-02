@@ -1,0 +1,173 @@
+{
+  "address": "0x1a660Fa437Fd01a3421e157903AAa4e8EaA23a55",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "t0",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "t1",
+          "type": "address"
+        },
+        {
+          "internalType": "uint24",
+          "name": "f",
+          "type": "uint24"
+        },
+        {
+          "internalType": "uint128",
+          "name": "l",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "liquidity",
+      "outputs": [
+        {
+          "internalType": "uint128",
+          "name": "",
+          "type": "uint128"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint128",
+          "name": "l",
+          "type": "uint128"
+        }
+      ],
+      "name": "setLiquidity",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "token0",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "token1",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0xcd920b58f7454043d77103dfb4f45ee1c72624ea0c8e000537f1e0f1804fb9fd",
+  "receipt": {
+    "to": null,
+    "from": "0x2a1F5eB3e84e58e6F1e565306298B9dE1273f203",
+    "contractAddress": "0x1a660Fa437Fd01a3421e157903AAa4e8EaA23a55",
+    "transactionIndex": 36,
+    "gasUsed": "185632",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x8d1f424ab73e95d3f7a97050efefa70593e1df1e84dc450832918c9682ef5eef",
+    "transactionHash": "0xcd920b58f7454043d77103dfb4f45ee1c72624ea0c8e000537f1e0f1804fb9fd",
+    "logs": [],
+    "blockNumber": 6024359,
+    "cumulativeGasUsed": "4496501",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x2e8B93D6cB791C28777E86Ec4c7e663DDF1B7225",
+    "0x47D3c247455761CF829Deb210b6Fc7eb876a3687",
+    500,
+    "745249"
+  ],
+  "numDeployments": 37,
+  "solcInputHash": "2c007285faf9b4a97aafef1992660d50",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"t0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"t1\",\"type\":\"address\"},{\"internalType\":\"uint24\",\"name\":\"f\",\"type\":\"uint24\"},{\"internalType\":\"uint128\",\"name\":\"l\",\"type\":\"uint128\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"liquidity\",\"outputs\":[{\"internalType\":\"uint128\",\"name\":\"\",\"type\":\"uint128\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint128\",\"name\":\"l\",\"type\":\"uint128\"}],\"name\":\"setLiquidity\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"token0\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"token1\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/MockUniswapV3Pool.sol\":\"MockUniswapV3Pool\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/IUniswapV3Pool.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-2.0-or-later\\npragma solidity >=0.5.0;\\n\\n\\n/// @title The interface for a Uniswap V3 Pool\\n/// @notice A Uniswap pool facilitates swapping and automated market making between any two assets that strictly conform\\n/// to the ERC20 specification\\n/// @dev The pool interface is broken up into many smaller pieces\\ninterface IUniswapV3Pool{\\n    function liquidity() external view returns (uint128);\\n    function token0() external view returns (address);\\n    function token1() external view returns (address);\\n}\",\"keccak256\":\"0xd9fa5d92a3c7d1f53ff0ddbd4e04a5ef84faae96b067597e27016b8567e5fafc\",\"license\":\"GPL-2.0-or-later\"},\"contracts/MockUniswapV3Pool.sol\":{\"content\":\"pragma solidity ^0.8.0;\\n\\nimport \\\"./IUniswapV3Pool.sol\\\";\\n\\ncontract MockUniswapV3Pool is IUniswapV3Pool {\\n\\n    address _token0;\\n    address _token1;\\n    uint128 _liquidity;\\n    uint24 _fee;\\n\\n    constructor(\\n        address t0,\\n        address t1,\\n        uint24 f,\\n        uint128 l\\n    ) {\\n        _token0 = t0;\\n        _token1 = t1;\\n        _fee = f;\\n        _liquidity = l;\\n    }\\n\\n    function setLiquidity(uint128 l) external {\\n        _liquidity = l;\\n    }\\n\\n\\tfunction liquidity() external view override returns (uint128) {\\n        return _liquidity;\\n    }\\n\\n\\tfunction token0() external view override returns (address) {}\\n\\n\\tfunction token1() external view override returns (address) {}\\n}\\n\",\"keccak256\":\"0x060fd7a4de4ab12c17db3505b4983ddb77c68fc2fa9bb95cc9ba38fb3c6bc394\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b5060405161024c38038061024c83398101604081905261002f916100bb565b600080546001600160a01b03199081166001600160a01b0396871617909155600180549091169390941692909217909255600280546001600160981b031916600160801b62ffffff909416939093026001600160801b031916929092176001600160801b03909116179055610128565b80516001600160a01b03811681146100b657600080fd5b919050565b600080600080608085870312156100d157600080fd5b6100da8561009f565b93506100e86020860161009f565b9250604085015162ffffff8116811461010057600080fd5b60608601519092506001600160801b038116811461011d57600080fd5b939692955090935050565b610115806101376000396000f3fe6080604052348015600f57600080fd5b506004361060465760003560e01c80630dfe168114604b5780631a68650214605f5780633d718da0146079578063d21220a714604b575b600080fd5b604051600081526020015b60405180910390f35b6002546040516001600160801b0390911681526020016056565b60af608436600460b1565b600280546fffffffffffffffffffffffffffffffff19166001600160801b0392909216919091179055565b005b60006020828403121560c257600080fd5b81356001600160801b038116811460d857600080fd5b939250505056fea2646970667358221220422a4740b23204f4383da79d34dfcb58b67b5434982a5ab5468fb254f4a28c2164736f6c63430008140033",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060465760003560e01c80630dfe168114604b5780631a68650214605f5780633d718da0146079578063d21220a714604b575b600080fd5b604051600081526020015b60405180910390f35b6002546040516001600160801b0390911681526020016056565b60af608436600460b1565b600280546fffffffffffffffffffffffffffffffff19166001600160801b0392909216919091179055565b005b60006020828403121560c257600080fd5b81356001600160801b038116811460d857600080fd5b939250505056fea2646970667358221220422a4740b23204f4383da79d34dfcb58b67b5434982a5ab5468fb254f4a28c2164736f6c63430008140033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 6187,
+        "contract": "contracts/MockUniswapV3Pool.sol:MockUniswapV3Pool",
+        "label": "_token0",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 6189,
+        "contract": "contracts/MockUniswapV3Pool.sol:MockUniswapV3Pool",
+        "label": "_token1",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_address"
+      },
+      {
+        "astId": 6191,
+        "contract": "contracts/MockUniswapV3Pool.sol:MockUniswapV3Pool",
+        "label": "_liquidity",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_uint128"
+      },
+      {
+        "astId": 6193,
+        "contract": "contracts/MockUniswapV3Pool.sol:MockUniswapV3Pool",
+        "label": "_fee",
+        "offset": 16,
+        "slot": "2",
+        "type": "t_uint24"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_uint128": {
+        "encoding": "inplace",
+        "label": "uint128",
+        "numberOfBytes": "16"
+      },
+      "t_uint24": {
+        "encoding": "inplace",
+        "label": "uint24",
+        "numberOfBytes": "3"
+      }
+    }
+  }
+}

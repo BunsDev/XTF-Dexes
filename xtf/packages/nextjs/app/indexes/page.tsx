@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as young from "../../../../../coingecko/categories/young.json";
 import * as category from "../../../../../coingecko/category.json";
 import * as market from "../../../../../coingecko/market.json";
@@ -15,6 +15,7 @@ const youngList = Object.values(young);
 
 const Debug: NextPage = () => {
   const [showAll, setShowAll] = useState(false);
+  const [lastUpdate, setLastUpdate] = useState("1 June 2024");
   const indexData = Object.values(market);
   const indexLimit = 20;
 
@@ -67,7 +68,6 @@ const Debug: NextPage = () => {
         </h2>
         <br />
         <br />
-
 
         <br></br>
 
@@ -326,70 +326,121 @@ const Debug: NextPage = () => {
           </Row>
         )}
         {showAll && (
-          <List
-            // className="demo-loadmore-list"
-            itemLayout="horizontal"
-            bordered
-            style={{
-              marginTop: "80px",
-              minHeight: "400px",
-              width: "800px",
-              margin: "auto",
-            }}
-            dataSource={
-              // meme is not an array, so we need to convert it to an array
-              Object.keys(indexData)
-                .map((k: any) => indexData[k])
-                .slice(0, indexLimit)
-            }
-            renderItem={item => (
-              <List.Item
-                actions={[
-                  <a key="list-loadmore-edit">{"Rank #" + item.market_cap_rank}</a>,
-                  <a key="list-loadmore-more">{"Lqdty: " + Math.random().toFixed(2) + "P"}</a>,
-                ]}
+          <>
+            <b>Last Price Sample</b>: {lastUpdate}
+            <br></br>
+            <b>Time Window</b>: 30 days
+            <br></br>
+            <b>Bribe</b>: 0.05 sepETH
+            <br></br>
+            <div
+              style={{
+                display: "flex",
+                // center the buttons
+                justifyContent: "center",
+                gap: "10px",
+              }}
+            >
+              <button
+                style={{
+                  marginTop: "10px",
+                  paddingRight: "5px",
+                  paddingLeft: "5px",
+                  borderRadius: "10px",
+                  color: "white",
+                  backgroundColor: "#f56a00",
+                }}
+                onClick={() => {
+                  setLastUpdate(new Date().toLocaleString());
+                }}
               >
-                <List.Item.Meta
-                  avatar={
-                    <Avatar
-                      style={{
-                        width: "50px",
-                        height: "50px",
-                      }}
-                      src={item.image}
-                    />
-                  }
-                  title={
-                    <a href="https://ant.design">
-                      {
-                        <>
-                          {item.name}
-                          <Tag
-                            style={{
-                              marginLeft: "10px",
-                            }}
-                          >
-                            {youngList.find((y: any) => String(y.symbol).toLowerCase() === item.symbol.toLowerCase())
-                              ?.networks?.[0].Name || "Wrapped Ethereum (Sepolia)"}
-                          </Tag>
-                        </>
-                      }
-                    </a>
-                  }
-                  description={
-                    <span>
-                      {youngList.find((y: any) => String(y.symbol).toLowerCase() === item.symbol.toLowerCase())
-                        ?.descriptions?.en !== undefined
-                        ? youngList
-                            .find((y: any) => String(y.symbol).toLowerCase() === item.symbol.toLowerCase())
-                            ?.descriptions?.en?.slice(0, 100) + "..."
-                        : "No description available"}
-                    </span>
-                  }
-                />
-              </List.Item>
-            )}
-          />
+                Collect Prices (Bribe)
+              </button>
+              <button
+                style={{
+                  marginTop: "10px",
+                  padding: "3px",
+                  paddingRight: "7px",
+                  paddingLeft: "7px",
+                  borderRadius: "10px",
+                  color: "white",
+                  // green
+                  backgroundColor: "#52c41a",
+                }}
+                onClick={() => {
+                  setLastUpdate(new Date().toLocaleString());
+                }}
+              >
+                Persist Index
+              </button>
+            </div>
+            <br></br>
+            <br></br>
+            <List
+              // className="demo-loadmore-list"
+              itemLayout="horizontal"
+              bordered
+              style={{
+                marginTop: "80px",
+                minHeight: "400px",
+                width: "800px",
+                margin: "auto",
+              }}
+              dataSource={
+                // meme is not an array, so we need to convert it to an array
+                Object.keys(indexData)
+                  .map((k: any) => indexData[k])
+                  .slice(0, indexLimit)
+              }
+              renderItem={item => (
+                <List.Item
+                  actions={[
+                    <a key="list-loadmore-edit">{"Rank #" + item.market_cap_rank}</a>,
+                    <a key="list-loadmore-more">{"Lqdty: " + Math.random().toFixed(2) + "P"}</a>,
+                  ]}
+                >
+                  <List.Item.Meta
+                    avatar={
+                      <Avatar
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                        }}
+                        src={item.image}
+                      />
+                    }
+                    title={
+                      <a href="https://ant.design">
+                        {
+                          <>
+                            {item.name}
+                            <Tag
+                              style={{
+                                marginLeft: "10px",
+                              }}
+                            >
+                              {youngList.find((y: any) => String(y.symbol).toLowerCase() === item.symbol.toLowerCase())
+                                ?.networks?.[0].Name || "Wrapped Ethereum (Sepolia)"}
+                            </Tag>
+                          </>
+                        }
+                      </a>
+                    }
+                    description={
+                      <span>
+                        {youngList.find((y: any) => String(y.symbol).toLowerCase() === item.symbol.toLowerCase())
+                          ?.descriptions?.en !== undefined
+                          ? youngList
+                              .find((y: any) => String(y.symbol).toLowerCase() === item.symbol.toLowerCase())
+                              ?.descriptions?.en?.slice(0, 100) + "..."
+                          : "No description available"}
+                      </span>
+                    }
+                  />
+                </List.Item>
+              )}
+            />
+          </>
         )}
       </div>
       <Divider></Divider>

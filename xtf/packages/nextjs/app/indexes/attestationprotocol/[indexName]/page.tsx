@@ -41,6 +41,7 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
   const [indexData, setIndexData] = useState<any>([]);
   const [equalWeighted, setEqualWeighted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [stepCount, setStepCount] = useState(2);
 
   const [etehreumTimeStamp, setEthereumTimeStamp] = useState<any>(new Date().toLocaleDateString());
   const [binanceTimeStamp, setBinanceTimeStamp] = useState<any>(new Date().toLocaleDateString());
@@ -242,11 +243,33 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
             // center the text
             margin: "auto",
           }}
-          current={2}
+          current={stepCount}
           items={[
             {
               title: "Tokens Proposed",
-              description: "One of the trusted entities has proposed the tokens and the weights for the index.",
+              description: (
+                <>
+                  One of the trusted entities has proposed the tokens and the weights for the index.
+                  <br></br>
+                  <br></br>
+                  <button
+                    style={{
+                      height: "30px",
+                      width: "100%",
+                      padding: "3px 4px",
+                      backgroundColor: "#f56a00",
+                      color: "white",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      console.log("clicked");
+                    }}
+                  >
+                    Propose new tokens
+                  </button>
+                </>
+              ),
               subTitle: (
                 <a
                   style={{
@@ -261,7 +284,29 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
             },
             {
               title: "Approved",
-              description: "All the trusted entities have approved the tokens and the weights for the index.",
+              description: (
+                <>
+                  All the trusted entities have approved the tokens and the weights for the index
+                  <br></br>
+                  <button
+                    style={{
+                      height: "30px",
+                      width: "100%",
+                      padding: "3px 4px",
+                      backgroundColor: "#f56a00",
+                      color: "white",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      console.log("clicked");
+                    }}
+                  >
+                    Approve
+                  </button>
+                </>
+              ),
+
               subTitle: (
                 <a
                   style={{
@@ -287,8 +332,29 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
                   TXhash (0x88f)
                 </a>
               ),
-              description:
-                "Approved tokens are listed in an ETHSign attestation on the blockchain with their respective weights.",
+              description: (
+                <>
+                  Approved tokens are listed in an ETHSign attestation on the blockchain with their respective weights.
+                  <br></br>
+                  <button
+                    style={{
+                      height: "30px",
+                      width: "100%",
+                      padding: "3px 4px",
+                      // green
+                      backgroundColor: "#f56a00",
+                      color: "white",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      console.log("clicked");
+                    }}
+                  >
+                    Publish
+                  </button>
+                </>
+              ),
             },
           ]}
         />

@@ -42,7 +42,7 @@ struct SupplyMessage {
 struct AggregatorParams {
     uint256 _timeWindow; 
     uint256 _sampleSize;
-    // uint32 _chainId;3
+    // uint32 _chainId;
     uint256 _bribeUnit;
 }
 
@@ -222,7 +222,7 @@ contract IndexAggregator is CCIPReceiver {
     }
 
     function collectPriceFeeds() external {
-        require(block.timestamp - lastSampleTime >= samplingFrequency, "IndexAggregator: Sampling frequency not reached");
+        // require(block.timestamp - lastSampleTime >= samplingFrequency, "IndexAggregator: Sampling frequency not reached");
 
         // if (block.timestamp - lastSampleTime >= timeWindow) {
         //     for (uint256 i = 0; i < tokenInfo.length; i++) {
@@ -265,19 +265,19 @@ contract IndexAggregator is CCIPReceiver {
                 for (uint256 j = 0; j < tokenInfo[i]._tags.length; j++) {
                     if (keccak256(abi.encodePacked(tokenInfo[i]._tags[j])) == keccak256(abi.encodePacked(tag))) {
                         // need to check if the tag was verified on the tagging system
-                        require(
-                            taggingVerifier.tokenSymbolToVerifiedTagsMap(tokenInfo[i]._symbol, tag) == true,
-                            "IndexAggregator: Tag not verified"
-                        );
+                        // require(
+                        //     taggingVerifier.tokenSymbolToVerifiedTagsMap(tokenInfo[i]._symbol, tag) == true,
+                        //     "IndexAggregator: Tag not verified"
+                        // );
                         tmpTokens.push(tokenInfo[i]);
                     }
                 }
             }
-            require(
-                tmpTokens.length == indexOrders.length,  "IndexAggregator: Invalid length of token with required tags");
+            // require(
+            //     tmpTokens.length == indexOrders.length,  "IndexAggregator: Invalid length of token with required tags");
         }
         else{
-           require(indexOrders.length == tokenInfo.length, "IndexAggregator: Invalid length of indexOrders");
+        //    require(indexOrders.length == tokenInfo.length, "IndexAggregator: Invalid length of indexOrders");
         }
 
         uint256 token_a_value;

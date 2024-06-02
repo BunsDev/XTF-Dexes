@@ -1,0 +1,149 @@
+[
+  [
+    {
+      "_symbol": "icp",
+      "_address": "0x261077B4735a9f51Fa4D039622e44034685f8D15",
+      "_chainId": "11155111",
+      "_aggregator": "0x39d023905bDe8a03a2DE1277d32Ecd9873669756",
+      "_tags": [
+        "governance"
+      ]
+    },
+    {
+      "_symbol": "uni",
+      "_address": "0xE86Aaa5C82E1E27216E5C99965CDFDD7146e427c",
+      "_chainId": "11155111",
+      "_aggregator": "0x1A25d64647ed559E805b1A3671ff6a7007DeDfe8",
+      "_tags": [
+        "governance"
+      ]
+    },
+    {
+      "_symbol": "mkr",
+      "_address": "0x4F5599a8Ac5277844b08AC10f285F5fD835Ea26e",
+      "_chainId": "11155111",
+      "_aggregator": "0xddEFeB3cb5a1aa63DDfDa11Ac1C19bFDA84852D8",
+      "_tags": [
+        "governance"
+      ]
+    },
+    {
+      "_symbol": "aave",
+      "_address": "0x279d81B84a6Ea9a681D2D0C05069D9bCC7b1Dea2",
+      "_chainId": "11155111",
+      "_aggregator": "0x29BF60e7F7297eB933b669874E6f3D58fB3410bF",
+      "_tags": [
+        "governance"
+      ]
+    },
+    {
+      "_symbol": "xec",
+      "_address": "0x3F199C3C5bCa39a6dcFCcD58ef4444f005340E8c",
+      "_chainId": "11155111",
+      "_aggregator": "0xb76129dEa978931f2b6Eb5d19Cf0ffa8637E221B",
+      "_tags": [
+        "governance"
+      ]
+    },
+    {
+      "_symbol": "rbn",
+      "_address": "0xD0a2eAC2c85F5268862be40DC2C5A291E2642203",
+      "_chainId": "11155111",
+      "_aggregator": "0xFa49d3bf6Db9ac1aFB8836eEc64Da0e111d0c8e6",
+      "_tags": [
+        "governance"
+      ]
+    },
+    {
+      "_symbol": "snx",
+      "_address": "0x96FE8a937b7775dF3d5935689a2752020F3E39eE",
+      "_chainId": "11155111",
+      "_aggregator": "0x96Eb955a0ca6453b33673Ab7a416Bc931696Ae57",
+      "_tags": [
+        "governance"
+      ]
+    },
+    {
+      "_symbol": "cake",
+      "_address": "0x6f183E74FB60bB77329d9F896b1f705F9F17Cc68",
+      "_chainId": "11155111",
+      "_aggregator": "0x2238c422917636e71F0b79643556865Ed05F5B4B",
+      "_tags": [
+        "governance"
+      ]
+    },
+    {
+      "_symbol": "crv",
+      "_address": "0x52D90Fb98e99142F2f8f40Cf1C38755Cd779Bb55",
+      "_chainId": "11155111",
+      "_aggregator": "0x644Bc06b7e4b3422a8f4E8108F50Aa8dB2a3d3F6",
+      "_tags": [
+        "governance"
+      ]
+    },
+    {
+      "_symbol": "ens",
+      "_address": "0x45f9c02617dF6D1c75d5a9259D7BE941B3Cbe6bb",
+      "_chainId": "11155111",
+      "_aggregator": "0x75EC4640149086099f64b0bdec3906FE0A3e722c",
+      "_tags": [
+        "governance"
+      ]
+    },
+    {
+      "_symbol": "zrx",
+      "_address": "0xA2fbE4BC90Bcef9Eb38FbD7EDD8A4cFd0C1CE6c1",
+      "_chainId": "11155111",
+      "_aggregator": "0xa7191Dc6a118bbcA51E50Ee02E836E7Fb801d607",
+      "_tags": [
+        "governance"
+      ]
+    },
+    {
+      "_symbol": "amp",
+      "_address": "0x01b9f082F3f67fA334F7EB0bA236C7ce05086EFB",
+      "_chainId": "11155111",
+      "_aggregator": "0x3d3464FFfe0CB565E5776C9931C1099D9E54C921",
+      "_tags": [
+        "governance"
+      ]
+    },
+    {
+      "_symbol": "comp",
+      "_address": "0x1745A6e812CD39FFa7542214B2D3a4D864F83eaB",
+      "_chainId": "11155111",
+      "_aggregator": "0x7716D49E0d1d1AFbF593C04edCB8541E96D439b9",
+      "_tags": [
+        "governance"
+      ]
+    },
+    {
+      "_symbol": "yfi",
+      "_address": "0x2e8B93D6cB791C28777E86Ec4c7e663DDF1B7225",
+      "_chainId": "11155111",
+      "_aggregator": "0x0CC0Fc50BA7E459C061eF7Af9826e8Dbbb17d3Ce",
+      "_tags": [
+        "governance"
+      ]
+    }
+  ],
+  60,
+  5,
+  "0x6F48ed8Ba8aae013Ba46a6c4088BA553ef7AC5Ed",
+  [
+    {
+      "id": "governance",
+      "name": "Governance",
+      "market_cap": 27064891587.60192,
+      "market_cap_change_24h": -0.2535137975793425,
+      "content": "Governance tokens are used to determine the direction or decisions taken by a protocol. A protocol’s team or even its community members can create proposals to introduce new features or even change the terms of governance itself. Once a proposal has been discussed and further fleshed out, token holders can vote on the decision to be made. The weight of your votes is determined based on the number of governance tokens held. ",
+      "top_3_coins": [
+        "https://assets.coingecko.com/coins/images/14495/small/Internet_Computer_logo.png?1696514180",
+        "https://assets.coingecko.com/coins/images/12504/small/uni.jpg?1696512319",
+        "https://assets.coingecko.com/coins/images/1364/small/Mark_Maker.png?1696502423"
+      ],
+      "volume_24h": 1117733006.9174755,
+      "updated_at": "2024-05-06T13:05:43.016Z"
+    }
+  ]
+]
