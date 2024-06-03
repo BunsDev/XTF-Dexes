@@ -149,7 +149,6 @@ We use the `collectPriceFeeds` to collect prices (using Chanilnk AggregatorV3Int
     }
  ```
 
-
 #### Multi-chain data aggregation 
 
 Some of this data is available on different chains, so we implemented a messaging system to inform a primary chain (mainchain) of secondary chain data. Every time we need to create an index based on market cap we need to make sure supply data are updated.
@@ -370,6 +369,8 @@ In fact in  Solidity only check if the order is correct:
 
 Other minor challenges were related to the deprecation of some Thirdweb functionalities we used during our last hackathon, as well as the need for a subscription. For this reason, we decided to move to open-source solutions like Wagmi, Viem, and Scaffold-ETH 2.0. Despite an initial onboarding time, this transition proved to be beneficial. It facilitated quick-development of the app with easier solutions. Scaffold-ETH also provides the ability to explore contracts and interact with them directly from the user interface, allowing us to test all functionalities while easily viewing the state of all contracts. This enhanced the development process, and debugging capabilities and can help everyone to interact with the contract without the need to build an interface.
 
+Finally, we encountered a minor challenge with the ENV-ENC library for Chainlink Functions. It did not work initially because it wasn’t listed under that name in the registry. After examining the registry, we found that it is actually located at [npx @chainlink/env-enc](https://www.npmjs.com/package/@chainlink/env-enc?activeTab=readme), contrary to just env-enc as mentioned in many tutorials.
+
 ![skaffold](/skaffold.png)
 
 ## Accomplishments that we're proud of
@@ -396,18 +397,19 @@ We liked the combination of a bribing system with the Chainlink Upkeep system. W
 
 Additionally, we believe that using ZK TLS proofs similar to DECO can help bring secure, non-public data on-chain. For instance, while our current example uses public data, we envision a future where we could gather valuable data from sources like the Bloomberg terminal and bring them on-chain to enhance our indexes.
 
+# CHAINLINK PRODUCTS:
+
+**For a detailed explanation, please refer to the text above**
+
+- **CCIP**: to communicate on chain data from sidechains to mainchain
+- **Upkeep & Functions**: to keep price and onchain data collection updated as required by the index
+- **Data Feed Oracles**: to aggregate them over time and build an index
 
 
+----
 
 
-
-
-
-
-
-
-
-
+----
 
 
 # Coingecko API
@@ -422,15 +424,8 @@ curl --request GET \
 # issues
 
 ENV-ENC Does not work because it is not with that name in the registry after looking the registry looks like it is at npx @chainlink/env-enc
-
 curl --request GET \
 https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&category=exchange-based-tokens
-
-
 curl --request GET \
      --url https://pro-api.coingecko.com/api/v3/coins/categories/list \
      --header 'accept: application/json'
-
-
-
-     CG-1qLttgwFvLh5bUCrtauZEaKK
