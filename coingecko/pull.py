@@ -1,5 +1,6 @@
 import json
 import requests
+import time
 
 # Function to call the API and save the result
 def fetch_and_save_data(entry):
@@ -10,7 +11,9 @@ def fetch_and_save_data(entry):
         'category': entry['id']
     }
     response = requests.get(base_url, params=params)
-    
+    # WAIT 25 SECONDS
+    time.sleep(25)
+
     if response.status_code == 200:
         file_name = "categories/" + entry['id'] + ".json"
         with open(file_name, 'w') as file:

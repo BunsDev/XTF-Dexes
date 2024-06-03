@@ -6,7 +6,7 @@ import "./IUniswapV3Pool.sol";
 
 contract LiquidityManager {
     IUniswapV3Factory public factory;
-    uint24[] public feeTiers = [500, 3000, 10000]; // Example fee tiers: 0.05%, 0.3%, 1%
+    uint24[] public feeTiers = [500, 3000, 10000]; // Example fee tiers: 0.05%, 0.3%, 1% these are Uniswap V3 standards
     address[] public comparisonTokens;
 
     constructor(address _factory, address[] memory _comparisonTokens) {

@@ -1,43 +1,64 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import * as young from "../../../../../coingecko/categories/young.json";
 import * as category from "../../../../../coingecko/category.json";
 import * as market from "../../../../../coingecko/market.json";
-import { Avatar, Card, Col, Divider, InputNumber, List, Row, Select, Switch, Tag } from "antd";
+import { InfoCircleOutlined } from "@ant-design/icons";
+import { Avatar, Card, Col, Divider, InputNumber, List, Modal, Row, Select, Switch, Tag } from "antd";
 import { Watermark } from "antd";
 import { Steps } from "antd";
 import type { NextPage } from "next";
+import { useWriteContract } from "wagmi";
+import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { getAllContracts } from "~~/utils/scaffold-eth/contractsData";
 
 const { Group } = Avatar;
 const youngList = Object.values(young);
 
-const Debug: NextPage = () => {
+const Indexes: NextPage = () => {
   const [showAll, setShowAll] = useState(false);
   const [lastUpdate, setLastUpdate] = useState("1 June 2024");
+  const [modalState, setModalState] = useState(0);
   const indexData = Object.values(market);
   const indexLimit = 20;
 
-  const contractName = "TLSIndexNotary";
+  const contractName = "IndexAggregator";
+  const { targetNetwork } = useTargetNetwork();
 
-  // const { isFetching: isFetToken, refetch: tokensFetch } = useContractRead({
-  //   address: contractsData[contractName].address,
-  //   functionName: "verifyProof",
-  //   abi: contractsData[contractName].abi,
-  //   args: [],
-  //   enabled: false,
-  //   onError: (error: any) => {
-  //     const parsedErrror = getParsedError(error);
-  //     console.log(parsedErrror);
-  //   },
-  // });
+  const isModalVisible = modalState > 0;
 
   const contractsData = getAllContracts();
 
+  const { writeContract } = useWriteContract();
+
+  const currentChain = targetNetwork.name === "Sepolia" ? "ETHEREUM" : targetNetwork.name;
+
   return (
-    <>
-      <div className="text-center mt-8 p-10">
+    <Watermark
+      zIndex={-9}
+      style={
+        // take the whole screen in the behind all the elements
+        {
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          minHeight: "100%",
+        }
+      }
+      content={"Sepolia"}
+      height={230}
+      width={250}
+    >
+      <div
+        style={{
+          marginLeft: "70px",
+          marginRight: "70px",
+        }}
+        className="text-center mt-8 p-10"
+      >
         <h1
           style={{
             fontSize: "2rem",
@@ -64,7 +85,13 @@ const Debug: NextPage = () => {
             }}
             src="https://pbs.twimg.com/profile_images/1737538221880315905/RSy15epn_400x400.jpg"
           ></Avatar>
-          Attestations provided through <b>Reclaim</b> Protocol.
+          Attestations provided through <b>Reclaim</b> Protocol{" "}
+          <InfoCircleOutlined
+            onClick={() => {
+              setModalState(1);
+            }}
+            twoToneColor="#52c41a"
+          />
         </h2>
         <br />
         <br />
@@ -147,7 +174,13 @@ const Debug: NextPage = () => {
             }}
             src="https://img.cryptorank.io/coins/eth_sign1666614067820.png"
           ></Avatar>
-          Attestations provided through <b>ETH.Sign</b> Protocol.
+          Attestations provided through <b>ETH.Sign</b> Protocol{" "}
+          <InfoCircleOutlined
+            onClick={() => {
+              setModalState(2);
+            }}
+            twoToneColor="#52c41a"
+          />
         </h2>
         <br />
         <br />
@@ -187,7 +220,7 @@ const Debug: NextPage = () => {
                   textAlign: "left",
                 }}
               >
-                <b>Trusted entuty:</b>
+                <b>Trusted entities:</b>
                 <a
                   style={{
                     color: "blue",
@@ -257,7 +290,13 @@ const Debug: NextPage = () => {
             }}
             src="https://assets.coingecko.com/coins/images/877/large/chainlink-new-logo.png?1696502009"
           ></Avatar>
-          Powered by <b>ChainLink</b> Data Feeds
+          Powered by <b>ChainLink</b> Data Feeds{" "}
+          <InfoCircleOutlined
+            onClick={() => {
+              setModalState(3);
+            }}
+            twoToneColor="#52c41a"
+          />
         </h2>
         <Switch
           checkedChildren="Show All Tokens"
@@ -333,6 +372,9 @@ const Debug: NextPage = () => {
             <br></br>
             <b>Bribe</b>: 0.05 sepETH
             <br></br>
+            <b>Contract Reserve:</b> 1 sepETH (200 days left)
+            <br></br>
+            <br></br>
             <div
               style={{
                 display: "flex",
@@ -356,23 +398,58 @@ const Debug: NextPage = () => {
               >
                 Collect Prices (Bribe)
               </button>
-              <button
-                style={{
-                  marginTop: "10px",
-                  padding: "3px",
-                  paddingRight: "7px",
-                  paddingLeft: "7px",
-                  borderRadius: "10px",
-                  color: "white",
-                  // green
-                  backgroundColor: "#52c41a",
-                }}
-                onClick={() => {
-                  setLastUpdate(new Date().toLocaleString());
-                }}
-              >
-                Persist Index
-              </button>
+
+              {currentChain === "ETHEREUM" ? (
+                <button
+                  style={{
+                    marginTop: "10px",
+                    padding: "3px",
+                    paddingRight: "7px",
+                    paddingLeft: "7px",
+                    borderRadius: "10px",
+                    color: "white",
+                    // green
+                    backgroundColor: "#52c41a",
+                  }}
+                  onClick={async () => {
+                    await writeContract({
+                      address: contractsData[contractName].address,
+                      functionName: "setChainId",
+                      abi: contractsData[contractName].abi,
+                      args: [targetNetwork.id, targetNetwork.id],
+                    });
+                  }}
+                >
+                  Persist Index
+                </button>
+              ) : (
+                <button
+                  style={{
+                    marginTop: "10px",
+                    padding: "3px",
+                    paddingRight: "7px",
+                    paddingLeft: "7px",
+                    borderRadius: "10px",
+                    color: "white",
+                    // blue
+                    backgroundColor: "#1890ff",
+                  }}
+                  onClick={async () => {
+                    console.log("communicating to mainchain");
+                    console.log(contractsData[contractName].address);
+                    console.log(contractsData[contractName].abi);
+                    await writeContract({
+                      address: contractsData[contractName].address,
+                      functionName: "setChainId",
+                      abi: contractsData[contractName].abi,
+                      args: ["11155111", "11155111"],
+                    });
+                    // setLastUpdate(new Date().toLocaleString());
+                  }}
+                >
+                  Communicate to Mainchain
+                </button>
+              )}
             </div>
             <br></br>
             <br></br>
@@ -394,6 +471,9 @@ const Debug: NextPage = () => {
               }
               renderItem={item => (
                 <List.Item
+                  style={{
+                    background: "#f4f8ff",
+                  }}
                   actions={[
                     <a key="list-loadmore-edit">{"Rank #" + item.market_cap_rank}</a>,
                     <a key="list-loadmore-more">{"Lqdty: " + Math.random().toFixed(2) + "P"}</a>,
@@ -444,8 +524,38 @@ const Debug: NextPage = () => {
         )}
       </div>
       <Divider></Divider>
-    </>
+
+      <Modal
+        width={1500}
+        // title="ChainLink Data Feeds"
+        visible={isModalVisible}
+        onOk={() => setModalState(0)}
+        onCancel={() => setModalState(0)}
+        footer={null}
+      >
+        <Image
+          width={1400}
+          height={1200}
+          src={
+            modalState === 1
+              ? "/images/tls_oracle.png"
+              : modalState === 2
+              ? "/images/attestation.png"
+              : "/images/index_aggr.png"
+          }
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            borderRadius: "5px",
+            boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.25)",
+          }}
+          alt="Available on OpenSea"
+        />
+        <br />
+      </Modal>
+    </Watermark>
   );
 };
 
-export default Debug;
+export default Indexes;

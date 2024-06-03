@@ -56,14 +56,14 @@ contract TLSIndexNotary {
     }
 
   function verifyProof(Reclaim.Proof memory proof, string memory tokenListParamsString) public {
-      // Reclaim(reclaimAddress).verifyProof(proof);
-      // require(keccak256(abi.encodePacked(proof.claimInfo.parameters)) == keccak256(abi.encodePacked(tokenListParamsString)), "Invalid token list parameters");
+      Reclaim(reclaimAddress).verifyProof(proof);
+      require(keccak256(abi.encodePacked(proof.claimInfo.parameters)) == keccak256(abi.encodePacked(tokenListParamsString)), "Invalid token list parameters");
 
       // parse the token List string into a list of strings
       string[] memory tokenList = split(tokenListParamsString);
 
       for(uint i = 0; i < tokenList.length; i++){
-        // require(tokenSymbolToAddress[tokenList[i]] != address(0), "Token not yet registered");
+        require(tokenSymbolToAddress[tokenList[i]] != address(0), "Token not yet registered");
         defiPulseIndexForbes.push(tokenList[i]);
       }
       lastUpdateTimestamp = block.timestamp;

@@ -258,7 +258,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
               tokenInfo.push({
                 _symbol: priceObject.symbol,
                 _address: await simpleERC20.getAddress(),
-                _chainId: sepoliaChainId,
+                _chainId: sepoliaChainId.toString(),
                 _aggregator: await mockAggregator.getAddress(),
                 _tags: [categoryID],
               });
@@ -287,7 +287,6 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
     console.log("Deploying Index Aggregator", tokenInfo);
     console.log("Index Aggregator");
-
 
     await deploy("IndexAggregator", {
       from: deployer,

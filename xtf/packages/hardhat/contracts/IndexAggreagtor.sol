@@ -222,15 +222,15 @@ contract IndexAggregator is CCIPReceiver {
     }
 
     function collectPriceFeeds() external {
-        // require(block.timestamp - lastSampleTime >= samplingFrequency, "IndexAggregator: Sampling frequency not reached");
+        require(block.timestamp - lastSampleTime >= samplingFrequency, "IndexAggregator: Sampling frequency not reached");
 
-        // if (block.timestamp - lastSampleTime >= timeWindow) {
-        //     for (uint256 i = 0; i < tokenInfo.length; i++) {
-        //         if (movingAverage[i].length > 0) {
-        //             movingAverage[i].pop();
-        //         }
-        //     }
-        // }
+        if (block.timestamp - lastSampleTime >= timeWindow) {
+            for (uint256 i = 0; i < tokenInfo.length; i++) {
+                if (movingAverage[i].length > 0) {
+                    movingAverage[i].pop();
+                }
+            }
+        }
 
         for (uint256 i = 0; i < tokenInfo.length; i++) {
             (, int256 answer, , , ) = AggregatorV3Interface(tokenInfo[i]._aggregator).latestRoundData();
@@ -273,11 +273,11 @@ contract IndexAggregator is CCIPReceiver {
                     }
                 }
             }
-            // require(
-            //     tmpTokens.length == indexOrders.length,  "IndexAggregator: Invalid length of token with required tags");
+            require(
+                tmpTokens.length == indexOrders.length,  "IndexAggregator: Invalid length of token with required tags");
         }
         else{
-        //    require(indexOrders.length == tokenInfo.length, "IndexAggregator: Invalid length of indexOrders");
+           require(indexOrders.length == tokenInfo.length, "IndexAggregator: Invalid length of indexOrders");
         }
 
         uint256 token_a_value;

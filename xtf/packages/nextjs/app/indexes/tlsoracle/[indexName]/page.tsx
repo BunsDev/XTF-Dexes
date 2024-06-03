@@ -63,7 +63,7 @@ const IndexPage: NextPage = ({ params }: { params: { indexName: string } }) => {
         .then(response => response.json())
         .then(data => setProof(data))
         .catch(error => console.error("Error fetching data:", error));
-    }, 15000);
+    }, 55000);
 
     // console.log("indexData", indexData);
   }, [url]);
